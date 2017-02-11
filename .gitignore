@@ -2,4 +2,7 @@ bin/
 obj/
 packages/
 
+.vs/
+_ReSharper.Caches/
+
 *.suo
