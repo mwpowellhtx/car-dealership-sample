@@ -15,6 +15,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Powell.Vehicles.Domain.Data
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Powell.Vehicles.Console", "Powell.Vehicles.Console\Powell.Vehicles.Console.csproj", "{415D64C1-3A3D-405D-A6E5-E277D515CAE0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Powell.Identity.Domain", "Powell.Identity.Domain\Powell.Identity.Domain.csproj", "{DD20EF3E-707F-498F-8436-F3D5B4CAFD4C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Powell.Identity.Domain.Data", "Powell.Identity.Domain.Data\Powell.Identity.Domain.Data.csproj", "{5C3DAFDD-C75D-4228-897E-F5284F668B91}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +49,14 @@ Global
 		{415D64C1-3A3D-405D-A6E5-E277D515CAE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{415D64C1-3A3D-405D-A6E5-E277D515CAE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{415D64C1-3A3D-405D-A6E5-E277D515CAE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD20EF3E-707F-498F-8436-F3D5B4CAFD4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD20EF3E-707F-498F-8436-F3D5B4CAFD4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD20EF3E-707F-498F-8436-F3D5B4CAFD4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD20EF3E-707F-498F-8436-F3D5B4CAFD4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C3DAFDD-C75D-4228-897E-F5284F668B91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C3DAFDD-C75D-4228-897E-F5284F668B91}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C3DAFDD-C75D-4228-897E-F5284F668B91}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C3DAFDD-C75D-4228-897E-F5284F668B91}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

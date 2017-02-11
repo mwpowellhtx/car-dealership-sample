@@ -54,6 +54,10 @@
       <Project>{F9D0FADC-F115-45EA-BB56-F1D1E140D2E5}</Project>
       <Name>Powell.Data.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Powell.Identity.Domain.Data\Powell.Identity.Domain.Data.csproj">
+      <Project>{5c3dafdd-c75d-4228-897e-f5284f668b91}</Project>
+      <Name>Powell.Identity.Domain.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Powell.Vehicles.Domain.Data\Powell.Vehicles.Domain.Data.csproj">
       <Project>{0E3B3C34-1FCE-4DBE-BE13-8341F74BBF8E}</Project>
       <Name>Powell.Vehicles.Domain.Data</Name>
