@@ -6,3 +6,4 @@ packages/
 _ReSharper.Caches/
 
 *.suo
+*.odt#
