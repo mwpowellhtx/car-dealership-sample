@@ -32,6 +32,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -40,8 +41,29 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Migrations\_1\Class1.cs" />
+    <Compile Include="Migrations\_1\_0\_0_CreateManufacturerTable.cs" />
+    <Compile Include="Migrations\_1\_0\_1_CreateModelTable.cs" />
+    <Compile Include="Migrations\_1\_0\_2_CreateYearTable.cs" />
+    <Compile Include="Migrations\_1\_0\_3_CreatePaintTable.cs" />
+    <Compile Include="Migrations\_1\_1\_0_CreateModelYearTable.cs" />
+    <Compile Include="Migrations\_1\_1\_1_CreateModelYearColorTable.cs" />
+    <Compile Include="Migrations\_1\_1\_2_CreateVehicleTable.cs" />
+    <Compile Include="Migrations\_1\_2\_4_CreatePaintInsteadOfDeleteTrigger.cs" />
+    <Compile Include="Migrations\_1\_2\_3_CreateModelYearInsteadOfDeleteTrigger.cs" />
+    <Compile Include="Migrations\_1\_2\_2_CreateYearInsteadOfDeleteTrigger.cs" />
+    <Compile Include="Migrations\_1\_2\_1_CreateModelInsteadOfDeleteTrigger.cs" />
+    <Compile Include="Migrations\_1\_2\_0_CreateManufacturerInsteadOfDeleteTrigger.cs" />
+    <Compile Include="Migrations\_2\_0\_3_PopulatePaintTable.cs" />
+    <Compile Include="Migrations\_2\_0\_2_PopulateYearTable.cs" />
+    <Compile Include="Migrations\_2\_0\_1_PopulateModelTable.cs" />
+    <Compile Include="Migrations\_2\_0\_0_PopulateManufacturerTable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Powell.Data.Core\Powell.Data.Core.csproj">
+      <Project>{F9D0FADC-F115-45EA-BB56-F1D1E140D2E5}</Project>
+      <Name>Powell.Data.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -4,14 +4,36 @@ using Powell.Collections.Generic;
 
 namespace Powell.Vehicles
 {
-    public class ModelYear : DomainObject, IPaintable
+    public class ModelYear : DomainObject
     {
-        public virtual int Year { get; set; }
-
         public virtual Model Model { get; set; }
+
+        private Year _year;
+
+        /// <summary>
+        /// Gets or sets the ModelYear Year. Set <see cref="ProducedOn"/> differently when other
+#pragma warning disable 1584, 1711, 1572, 1581, 1580
+        /// than the <see cref="Year.Value"/>.
+#pragma warning restore 1584, 1711, 1572, 1581, 1580
+        /// </summary>
+        public virtual Year Year
+        {
+            get { return _year; }
+            set
+            {
+                _year = value;
+                // Change ProducedOn if different from Year.
+                ProducedOn = _year.Value;
+            }
+        }
+
+        public virtual DateTime ProducedOn { get; set; }
 
         private IList<Vehicle> _vehicles;
 
+        /// <summary>
+        /// Gets the Vehicles in the ModelYear.
+        /// </summary>
         public virtual IList<Vehicle> Vehicles
         {
             get { return _vehicles; }
@@ -21,15 +43,27 @@ namespace Powell.Vehicles
         /// <summary>
         /// Gets the <see cref="Vehicles"/> <see cref="IList{Vehicle}"/> for internal use.
         /// </summary>
-        internal IList<Vehicle> InternalVehicles
-            => Vehicles.ToBidirectionalList(
-                a => a.ModelYear = this, r => r.ModelYear = null);
+        internal IList<Vehicle> InternalVehicles => Vehicles.ToBidirectionalList(
+            a => a.ModelYear = this, r => r.ModelYear = null);
 
         // TODO: TBD: potentially could normalize "paint" from even ModelYears ...
+
+        private IList<ModelYearColor> _colors;
+
         /// <summary>
-        /// Gets or sets the Paint which in which the Model is available.
+        /// Gets the Colors in which the ModelYear is available.
         /// </summary>
-        public virtual Paint Paint { get; set; }
+        public virtual IList<ModelYearColor> Colors
+        {
+            get { return _colors; }
+            protected set { _colors = value ?? new List<ModelYearColor>(); }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="Colors"/> <see cref="IList{ModelYearColor}"/> for internal use.
+        /// </summary>
+        internal IList<ModelYearColor> InternalColors => Colors.ToBidirectionalList(
+            a => a.ModelYear = this, r => r.ModelYear = null);
 
         public ModelYear()
         {
@@ -38,11 +72,11 @@ namespace Powell.Vehicles
 
         private void Initialize()
         {
-            // Make sure that Vehicles is properly initialized.
-            Vehicles = null;
-            Year = DateTime.Now.Year;
+            Year = new Year();
             Model = new Model();
-            Paint = new Paint();
+            // Make sure that collections are properly initialized.
+            Vehicles = null;
+            Colors = null;
         }
     }
 }

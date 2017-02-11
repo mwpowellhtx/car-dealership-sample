@@ -43,11 +43,13 @@
   <ItemGroup>
     <Compile Include="IPaintable.cs" />
     <Compile Include="ModelYear.cs" />
+    <Compile Include="ModelYearColor.cs" />
     <Compile Include="Paint.cs" />
     <Compile Include="Manufacturer.cs" />
     <Compile Include="Model.cs" />
     <Compile Include="Vehicle.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Year.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Powell.Domain.Core\Powell.Domain.Core.csproj">

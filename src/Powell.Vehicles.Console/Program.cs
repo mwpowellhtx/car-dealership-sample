@@ -1,7 +1,7 @@
 ﻿using System.Configuration;
-
 namespace Powell.Vehicles.Console
 {
+    using Domain.Migrations._1._0;
     using Migrators;
 
     class Program
@@ -12,7 +12,10 @@ namespace Powell.Vehicles.Console
         {
             // Verify that at least the database can be migrated downwards and upwards.
             using (var migrator = new SqlServerMigrator(ConnectionString
-                , typeof(SqlServerMigrator).Assembly))
+                    , typeof(SqlServerMigrator).Assembly
+                    , typeof(_0_CreateManufacturerTable).Assembly
+                )
+            )
             {
                 migrator.Down().Up();
             }

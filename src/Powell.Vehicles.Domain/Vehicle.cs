@@ -1,28 +1,33 @@
 ﻿namespace Powell.Vehicles
 {
-    public class Vehicle : DomainObject, IPaintable
+    public class Vehicle : DomainObject
     {
-        private ModelYear _modelYear;
-
         /// <summary>
         /// Gets or sets the ModelYear.
         /// </summary>
-        public virtual ModelYear ModelYear
-        {
-            get { return _modelYear; }
-            set
-            {
-                _modelYear = value;
-                Paint = _modelYear.Paint;
-                // And if after market paint is desired, then set the Paint freely after that.
-            }
-        }
+        public virtual ModelYear ModelYear { get; set; }
 
-        // TODO: TBD: potential joining table: Model-Paint, also Vehicle-Paint is entirely possible
         /// <summary>
         /// Gets or sets the Vehicle Paint.
         /// </summary>
-        public virtual Paint Paint { get; set; }
+        public virtual Paint Color { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Vehicle Mileage.
+        /// </summary>
+        /// <remarks>We shall not worry about odometer roll-over for the moment.</remarks>
+        public virtual double Mileage { get; set; }
+
+        private string _description;
+
+        /// <summary>
+        /// Gets or sets the Description.
+        /// </summary>
+        public virtual string Description
+        {
+            get { return _description; }
+            set { _description = value ?? string.Empty; }
+        }
 
         public Vehicle()
         {
@@ -31,8 +36,12 @@
 
         private void Initialize()
         {
-            // Paint is set upon setting the Model.
-            ModelYear = new ModelYear();
+            /* Model layer does not have sufficient perspective; leave to service/controller layer to
+             * connect the dots between ModelYear, ModelYearColor (default Color source), and Color. */
+
+            Mileage = default(double);
+            // Make sure collections and strings are set accordingly.
+            Description = null;
         }
     }
 }

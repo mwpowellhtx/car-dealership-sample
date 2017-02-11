@@ -1,13 +1,12 @@
+using System;
 using System.Collections.Generic;
 using Powell.Collections.Generic;
 
 namespace Powell.Vehicles
 {
-    public class Model : DomainObject
+    public class Year : DomainObject
     {
-        public virtual Manufacturer Make { get; set; }
-
-        public virtual string Name { get; set; }
+        public virtual DateTime Value { get; set; }
 
         private IList<ModelYear> _modelYears;
 
@@ -20,17 +19,17 @@ namespace Powell.Vehicles
         /// <summary>
         /// Gets the <see cref="ModelYears"/> <see cref="IList{ModelYear}"/> for internal use.
         /// </summary>
-        internal IList<ModelYear> InternalModelYears => ModelYears.ToBidirectionalList(a => a.Model = this, r => r.Model = null);
+        internal IList<ModelYear> InternalModelYears => ModelYears.ToBidirectionalList(a => a.Year = this, r => r.Year = null);
 
-        public Model()
+        public Year()
         {
             Initialize();
         }
 
         private void Initialize()
         {
-            Make = new Manufacturer();
-            // Make sure that Years is properly initialized.
+            Value = new DateTime(DateTime.Now.Year, 1, 1);
+            // Make sure collection is properly initialized.
             ModelYears = null;
         }
     }

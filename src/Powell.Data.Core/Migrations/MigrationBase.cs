@@ -8,8 +8,10 @@ namespace Powell.Migrations
     /// 
     /// </summary>
     /// <typeparam name="TConnection"></typeparam>
-    public abstract class MigrationBase<TConnection> : IMigration
+    /// <typeparam name="TParameter"></typeparam>
+    public abstract class MigrationBase<TConnection, TParameter> : DataBase<TParameter>, IMigration<TParameter>
         where TConnection : DbConnection
+        where TParameter : DbParameter
     {
         /// <summary>
         /// Gets whether ShouldDeleteMigration. Default is true.
@@ -38,7 +40,7 @@ namespace Powell.Migrations
         /// <summary>
         /// Gets the LastArguments.
         /// </summary>
-        public object[] LastArguments { get; private set; }
+        public TParameter[] LastArguments { get; private set; }
 
         /// <summary>
         /// Performs the Sql <paramref name="commandText"/> with optional <paramref name="args"/>.
@@ -46,7 +48,7 @@ namespace Powell.Migrations
         /// <param name="commandText"></param>
         /// <param name="args"></param>
         /// <returns>The number of rows affected.</returns>
-        protected int Sql(string commandText, params object[] args)
+        protected int Sql(string commandText, params TParameter[] args)
         {
             using (var cmd = _connection.CreateCommand())
             {

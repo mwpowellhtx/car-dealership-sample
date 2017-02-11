@@ -18,7 +18,7 @@ namespace Powell.Migrators
     /// </summary>
     /// <typeparam name="TConnection"></typeparam>
     /// <typeparam name="TParameter"></typeparam>
-    public abstract class MigratorBase<TConnection, TParameter> : IMigrator
+    public abstract class MigratorBase<TConnection, TParameter> : DataBase<TParameter>, IMigrator
         where TConnection : DbConnection
         where TParameter : DbParameter
     {
@@ -38,10 +38,6 @@ namespace Powell.Migrators
             // ReSharper disable once PossibleNullReferenceException
             return (IMigration) ctor.Invoke(new object[] {_connection});
         }
-
-        protected abstract TParameter CreateParameter<T>(string name, T value);
-
-        protected abstract TParameter CreateParameter<T>(string name, T value, int size);
 
         private void InsertMigration(IMigration migration)
         {

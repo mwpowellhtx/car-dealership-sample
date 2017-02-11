@@ -2,11 +2,23 @@
 
 namespace Powell.Migrations
 {
+    using static SqlServerDataBaseUtils;
+
     /// <summary>
     /// For academic or demonstration purposes this will be sufficient.
     /// </summary>
-    public abstract class SqlServerMigrationBase : MigrationBase<SqlConnection>
+    public abstract class SqlServerMigrationBase : MigrationBase<SqlConnection, SqlParameter>
     {
+        protected override SqlParameter CreateParameter<T>(string parameterName, T value)
+        {
+            return new SqlParameter(parameterName, GetDbType<T>()) { Value = value };
+        }
+
+        protected override SqlParameter CreateParameter<T>(string parameterName, T value, int size)
+        {
+            return new SqlParameter(parameterName, GetDbType<T>(), size) { Value = value };
+        }
+
         /// <summary>
         /// SchemaName defaults to "dbo".
         /// </summary>

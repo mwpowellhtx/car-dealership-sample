@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
+using Powell.Collections.Generic;
 
 namespace Powell.Vehicles
 {
@@ -24,7 +26,7 @@ namespace Powell.Vehicles
         /// <see cref="Color"/>
         public virtual string Value
         {
-            get { return $"#{Color.R:X2}{Color.G:X2}{Color.B:X2}"; }
+            get { return Color.ToRgbString(); }
             set
             {
                 // TODO: TBD: assumes a valid value: may put exception handling here.
@@ -35,6 +37,23 @@ namespace Powell.Vehicles
             }
         }
 
+        private IList<ModelYearColor> _modelYearColors;
+
+        /// <summary>
+        /// Gets the <see cref="ModelYearColor"/> items.
+        /// </summary>
+        public virtual IList<ModelYearColor> ModelYearColors
+        {
+            get { return _modelYearColors;}
+            protected set { _modelYearColors = value ?? new List<ModelYearColor>(); }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="ModelYearColors"/> <see cref="IList{ModelYearColor}"/> for internal use.
+        /// </summary>
+        internal virtual IList<ModelYearColor> InternalModelYearColors
+            => ModelYearColors.ToBidirectionalList(a => a.Color = this, r => r.Color = null);
+
         public Paint()
         {
             Initialize();
@@ -43,7 +62,22 @@ namespace Powell.Vehicles
         private void Initialize()
         {
             // Starting from the built-in colors.
-            Color = Color.Navy;
+            Color = Color.White;
+            // Make sure collections are initialized properly.
+            ModelYearColors = null;
+        }
+    }
+
+    internal static class PaintExtensionMethods
+    {
+        /// <summary>
+        /// Returns the <paramref name="color"/> as an encoded Rgb string; i.e. "#123456".
+        /// </summary>
+        /// <param name="color"></param>
+        /// <returns></returns>
+        internal static string ToRgbString(this Color color)
+        {
+            return $"#{color.R:X2}{color.G:X2}{color.B:X2}";
         }
     }
 }
