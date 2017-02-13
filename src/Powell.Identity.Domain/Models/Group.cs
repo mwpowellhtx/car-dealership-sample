@@ -15,7 +15,7 @@ namespace Powell.Identity.Domain
         /// <summary>
         /// Gets an <see cref="IList{Membership}"/> for internal use.
         /// </summary>
-        internal override IList<Membership> InternalMemberOf => MemberOf.ToBidirectionalList(
+        protected internal override IList<Membership> InternalMemberOf => MemberOf.ToBidirectionalList(
             a =>
             {
                 a.Member = this;
@@ -48,7 +48,7 @@ namespace Powell.Identity.Domain
         /// <summary>
         /// Gets an <see cref="IList{Membership}"/> for internal use.
         /// </summary>
-        internal virtual IList<Membership> InternalMembers => Members.ToBidirectionalList(
+        protected internal virtual IList<Membership> InternalMembers => Members.ToBidirectionalList(
             a =>
             {
                 a.Group = this;
@@ -86,7 +86,7 @@ namespace Powell.Identity.Domain
         /// </summary>
         /// <typeparam name="TCredential"></typeparam>
         /// <param name="member"></param>
-        internal virtual void AddMember<TCredential>(TCredential member)
+        protected internal virtual void AddMember<TCredential>(TCredential member)
             where TCredential : CredentialBase, new()
         {
             if (Members.Any(
@@ -104,7 +104,7 @@ namespace Powell.Identity.Domain
         /// </summary>
         /// <typeparam name="TCredential"></typeparam>
         /// <param name="member"></param>
-        internal virtual bool RemoveMember<TCredential>(TCredential member)
+        protected internal virtual bool RemoveMember<TCredential>(TCredential member)
             where TCredential : CredentialBase, new()
         {
             var m = Members.FirstOrDefault(x => x.Member.Equals(member));

@@ -6,6 +6,7 @@ using Microsoft.AspNet.Identity;
 namespace Powell.Identity.Domain
 {
     using Collections.Generic;
+    using static Privilege;
 
     //TODO: RYO or not? should worry about logging in, timing out, expiration, etc
     //TODO: may seriously consider leveraging the Microsoft Identity meta system to manage such things
@@ -23,17 +24,15 @@ namespace Powell.Identity.Domain
         /// <summary>
         /// Gets or sets the <see cref="IUser{Guid}.UserName"/>.
         /// </summary>
-        public virtual string UserName { get; set; }
+        public virtual string UserName
+        {
+            get { return Name; }
+            set { Name = value; }
+        }
 
         #endregion
 
         #region Borrowed from Identity Framework notions
-
-        ////TODO: "Claims" sounds more like phishing to me; phishing for details from things like external providers; don't care about that right now
-        ////
-        //// Summary:
-        ////     Navigation property for user claims
-        //public virtual ICollection<TClaim> Claims { get; }
 
         /// <summary>
         /// Gets or sets the Email.
@@ -129,6 +128,7 @@ namespace Powell.Identity.Domain
         /// </summary>
         public virtual string PasswordHash { get; set; }
 
+        // TODO: may want to re-seed the stamp on every access: leaving some of the serialization for cookie cache
         /// <summary>
         /// Gets the SecurityStamp. This is a random value that should change whenever
         /// User Credentials have changed, such as <see cref="PasswordHash"/>, etc.
@@ -139,9 +139,7 @@ namespace Powell.Identity.Domain
         /// unique identifier (wikipedia)</see>
         /// <a href="!:http://stackoverflow.com/questions/29350167/how-to-create-a-security-stamp-value-for-asp-net-identity-iusersecuritystampsto"
         /// >How to create a Security Stamp value for ASP.NET Identity (IUserSecurityStampStore)</a>
-        public virtual Guid SecurityStamp {
-            //TODO: may want to re-seed the stamp on every access: leaving some of the serialization for cookie cache
-            get; protected internal set; }
+        public virtual Guid SecurityStamp { get; protected internal set; }
 
         /// <summary>
         /// DefaultTwoFactoryEnabled: false
@@ -169,7 +167,7 @@ namespace Powell.Identity.Domain
         /// <summary>
         /// Gets an <see cref="IList{LoginInfo}"/> for internal use.
         /// </summary>
-        internal IList<LoginInfo> InternalLogins => Logins.ToBidirectionalList(
+        protected internal virtual IList<LoginInfo> InternalLogins => Logins.ToBidirectionalList(
             a => a.User = this, r => r.User = null);
 
         private IList<Claim> _claims;
@@ -186,13 +184,13 @@ namespace Powell.Identity.Domain
         /// <summary>
         /// Gets an <see cref="IList{Claim}"/> for internal use.
         /// </summary>
-        internal IList<Claim> InternalClaims => Claims.ToBidirectionalList(
+        protected internal virtual IList<Claim> InternalClaims => Claims.ToBidirectionalList(
             a => a.User = this, r => r.User = null);
 
         /// <summary>
         /// Gets an <see cref="IList{Membership}"/> for internal use.
         /// </summary>
-        internal override IList<Membership> InternalMemberOf => MemberOf.ToBidirectionalList(
+        protected internal override IList<Membership> InternalMemberOf => MemberOf.ToBidirectionalList(
             a =>
             {
                 a.Member = this;
@@ -216,15 +214,7 @@ namespace Powell.Identity.Domain
         ///// <summary>
         ///// Gets or sets the Profile.
         ///// </summary>
-        //public virtual Profile Profile
-        //{
-        //    get { return _profile; }
-        //    set
-        //    {
-        //        SetProperty(ref _profile, value ?? new Profile(), () => Profile,
-        //            (removing, adding) => !ReferenceEquals(adding, removing));
-        //    }
-        //}
+        //public virtual Profile Profile { get; set; }
 
         /// <summary>
         /// Default Constructor
@@ -271,16 +261,16 @@ namespace Powell.Identity.Domain
         /// <returns></returns>
         public virtual bool? Verify(Privilege privilege, params Feature[] features)
         {
-            //TODO: this whole part needs to be worked out...
+            // TODO: this whole part needs to be worked out...
 
-            //Returning Null means check my parent credential
-            if (privilege.Equals(Privilege.Inherited)) return null;
-            if (privilege.Equals(Privilege.NotSet)) return null;
+            // Returning Null means check my parent credential
+            if (privilege.Equals(Inherited)) return null;
+            if (privilege.Equals(NotSet)) return null;
 
-            //TODO: return true/false?
-            if (privilege.Equals(Privilege.Allow)) return false;
+            // TODO: return true/false?
+            if (privilege.Equals(Allow)) return false;
 
-            return !privilege.Equals(Privilege.Deny);
+            return !privilege.Equals(Deny);
         }
     }
 

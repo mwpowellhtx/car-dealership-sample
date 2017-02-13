@@ -47,7 +47,7 @@
     <Compile Include="Core\AccessControlStrategy.cs" />
     <Compile Include="Extensions\PermissionExtensionMethods.cs" />
     <Compile Include="Models\Group.cs" />
-    <Compile Include="Models\Privilege.cs" />
+    <Compile Include="Core\Privilege.cs" />
     <Compile Include="Models\Permission.cs" />
     <Compile Include="Models\Feature.cs" />
     <Compile Include="Models\LoginInfo.cs" />

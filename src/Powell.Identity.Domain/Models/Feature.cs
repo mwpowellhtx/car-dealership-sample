@@ -38,7 +38,7 @@ namespace Powell.Identity.Domain
         /// <summary>
         /// Gets an <see cref="IList{Feature}"/> for internal use.
         /// </summary>
-        internal IList<Feature> InternalChildren => Children.ToBidirectionalList(
+        protected internal virtual IList<Feature> InternalChildren => Children.ToBidirectionalList(
             a => a.Parent = this, r => r.Parent = null);
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace Powell.Identity.Domain
         /// <summary>
         /// Gets the Feature Branch starting with itself.
         /// </summary>
-        internal IEnumerable<Feature> Branch => GetBranch(this);
+        protected internal virtual IEnumerable<Feature> Branch => GetBranch(this);
 
         /// <summary>
         /// Permissions backing field.
@@ -68,7 +68,7 @@ namespace Powell.Identity.Domain
         /// <summary>
         /// Gets an <see cref="IList{Permission}"/> for internal use.
         /// </summary>
-        internal IList<Permission> InternalPermissions => Permissions.ToBidirectionalList(
+        protected internal virtual IList<Permission> InternalPermissions => Permissions.ToBidirectionalList(
             a =>
             {
                 a.Feature = this;
@@ -124,7 +124,7 @@ namespace Powell.Identity.Domain
         /// <param name="credential"></param>
         /// <param name="privilege"></param>
         /// <see cref="CredentialBase.AddRole(Feature,Privilege?)"/>
-        internal virtual void AddRole(CredentialBase credential, Privilege? privilege = null)
+        protected internal virtual void AddRole(CredentialBase credential, Privilege? privilege = null)
         {
             privilege = privilege ?? Inherited;
 

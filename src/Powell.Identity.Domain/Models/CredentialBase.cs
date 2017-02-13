@@ -11,6 +11,13 @@ namespace Powell.Identity.Domain
     public abstract class CredentialBase : ExpiringDomainObject
     {
         /// <summary>
+        /// Gets or sets the CredentialBase Name.
+        /// </summary>
+        /// <see cref="User.UserName"/>
+        /// <see cref="Group.Name"/>
+        public virtual string Name { get; set; }
+
+        /// <summary>
         /// MemberOf backing field.
         /// </summary>
         private IList<Membership> _memberOf;
@@ -27,7 +34,7 @@ namespace Powell.Identity.Domain
         /// <summary>
         /// Gets an <see cref="IList{Membership}"/> for internal use.
         /// </summary>
-        internal abstract IList<Membership> InternalMemberOf { get; }
+        protected internal abstract IList<Membership> InternalMemberOf { get; }
 
         /// <summary>
         /// Permissions backing field.
@@ -46,7 +53,7 @@ namespace Powell.Identity.Domain
         /// <summary>
         /// Gets an <see cref="IList{Permission}"/> for internal use.
         /// </summary>
-        internal IList<Permission> InternalPermissions => Permissions.ToBidirectionalList(
+        protected internal virtual IList<Permission> InternalPermissions => Permissions.ToBidirectionalList(
             a =>
             {
                 a.Credential = this;
@@ -85,8 +92,8 @@ namespace Powell.Identity.Domain
         /// </summary>
         /// <param name="feature"></param>
         /// <param name="privilege"></param>
-        /// <see cref="Feature.AddRole(CredentialBase,Privilege)"/>
-        internal void AddRole(Feature feature, Privilege? privilege = null)
+        /// <see cref="Feature.AddRole(CredentialBase,Privilege?)"/>
+        protected internal virtual void AddRole(Feature feature, Privilege? privilege = null)
         {
             privilege = privilege ?? Inherited;
 
