@@ -30,8 +30,8 @@ ON [{SchemaName}].[{TableName}]
 INSTEAD OF DELETE
 AS BEGIN
     SET NOCOUNT ON;
-    DELETE FROM [{SchemaName}].[ModelYearColor] WHERE [PaintId] IN (SELECT [Id] FROM [DELETED])
-    DELETE FROM [{SchemaName}].[Vehicle] WHERE [PaintId] IN (SELECT [Id] FROM [DELETED])
+    DELETE FROM [{SchemaName}].[ModelYearColor] WHERE [ColorId] IN (SELECT [Id] FROM [DELETED])
+    DELETE FROM [{SchemaName}].[Vehicle] WHERE [ColorId] IN (SELECT [Id] FROM [DELETED])
 END;");
         }
 

@@ -31,7 +31,7 @@ CREATE TABLE [{SchemaName}].[{TableName}]
         CONSTRAINT [FK_{TableName}_ModelYear] FOREIGN KEY
         REFERENCES [{SchemaName}].[ModelYear] ([Id])
         ON DELETE NO ACTION ON UPDATE NO ACTION
-    , [PaintId] [UNIQUEIDENTIFIER] NOT NULL
+    , [ColorId] [UNIQUEIDENTIFIER] NOT NULL
         CONSTRAINT [FK_{TableName}_Paint] FOREIGN KEY
         REFERENCES [{SchemaName}].[Paint] ([Id])
         ON DELETE NO ACTION ON UPDATE NO ACTION
