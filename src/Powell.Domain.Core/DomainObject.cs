@@ -4,7 +4,7 @@ namespace Powell
 {
     public abstract class DomainObject
     {
-        public Guid Id { get; set; }
+        public virtual Guid Id { get; set; }
 
         protected DomainObject()
         {
