@@ -37,13 +37,13 @@ namespace Powell.Vehicles
         public virtual IList<Vehicle> Vehicles
         {
             get { return _vehicles; }
-            internal set { _vehicles = value ?? new List<Vehicle>(); }
+            protected internal set { _vehicles = value ?? new List<Vehicle>(); }
         }
 
         /// <summary>
         /// Gets the <see cref="Vehicles"/> <see cref="IList{Vehicle}"/> for internal use.
         /// </summary>
-        internal IList<Vehicle> InternalVehicles => Vehicles.ToBidirectionalList(
+        protected internal virtual IList<Vehicle> InternalVehicles => Vehicles.ToBidirectionalList(
             a => a.ModelYear = this, r => r.ModelYear = null);
 
         // TODO: TBD: potentially could normalize "paint" from even ModelYears ...
@@ -62,7 +62,7 @@ namespace Powell.Vehicles
         /// <summary>
         /// Gets the <see cref="Colors"/> <see cref="IList{ModelYearColor}"/> for internal use.
         /// </summary>
-        internal IList<ModelYearColor> InternalColors => Colors.ToBidirectionalList(
+        protected internal virtual IList<ModelYearColor> InternalColors => Colors.ToBidirectionalList(
             a => a.ModelYear = this, r => r.ModelYear = null);
 
         public ModelYear()

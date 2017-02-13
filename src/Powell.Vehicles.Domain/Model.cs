@@ -20,7 +20,8 @@ namespace Powell.Vehicles
         /// <summary>
         /// Gets the <see cref="ModelYears"/> <see cref="IList{ModelYear}"/> for internal use.
         /// </summary>
-        internal IList<ModelYear> InternalModelYears => ModelYears.ToBidirectionalList(a => a.Model = this, r => r.Model = null);
+        protected internal virtual IList<ModelYear> InternalModelYears => ModelYears.ToBidirectionalList(
+            a => a.Model = this, r => r.Model = null);
 
         public Model()
         {

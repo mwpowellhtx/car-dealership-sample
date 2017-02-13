@@ -51,8 +51,8 @@ namespace Powell.Vehicles
         /// <summary>
         /// Gets the <see cref="ModelYearColors"/> <see cref="IList{ModelYearColor}"/> for internal use.
         /// </summary>
-        internal virtual IList<ModelYearColor> InternalModelYearColors
-            => ModelYearColors.ToBidirectionalList(a => a.Color = this, r => r.Color = null);
+        protected internal virtual IList<ModelYearColor> InternalModelYearColors => ModelYearColors.ToBidirectionalList(
+            a => a.Color = this, r => r.Color = null);
 
         public Paint()
         {

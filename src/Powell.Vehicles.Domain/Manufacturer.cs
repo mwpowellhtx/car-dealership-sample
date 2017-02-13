@@ -18,7 +18,8 @@ namespace Powell.Vehicles
         /// <summary>
         /// Gets the <see cref="Models"/> <see cref="IList{Model}"/> for internal use.
         /// </summary>
-        internal IList<Model> InternalModels => Models.ToBidirectionalList(a => a.Make = this, r => r.Make = null);
+        protected internal virtual IList<Model> InternalModels => Models.ToBidirectionalList(
+            a => a.Make = this, r => r.Make = null);
 
         public Manufacturer()
         {
