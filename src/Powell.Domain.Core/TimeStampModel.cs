@@ -2,17 +2,17 @@
 
 namespace Powell
 {
-    public class TimeStampModel : DomainObject, ICreatableModel
+    public class TimeStampModel : ICreatableModel
     {
         /// <summary>
         /// Gets or sets when CreatedOn.
         /// </summary>
-        public DateTime CreatedOn { get; set; }
+        public virtual DateTime CreatedOn { get; set; }
 
         /// <summary>
         /// Gets when ModifiedOn. This is a get-only property.
         /// </summary>
-        public DateTime ModifiedOn
+        public virtual DateTime ModifiedOn
         {
             get { return DateTime.UtcNow; }
             protected internal set { }
