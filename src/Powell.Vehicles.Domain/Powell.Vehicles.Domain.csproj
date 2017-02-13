@@ -41,7 +41,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IPaintable.cs" />
     <Compile Include="ModelYear.cs" />
     <Compile Include="ModelYearColor.cs" />
     <Compile Include="Paint.cs" />
