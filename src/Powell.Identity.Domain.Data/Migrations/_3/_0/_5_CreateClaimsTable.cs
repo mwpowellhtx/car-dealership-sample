@@ -35,8 +35,6 @@ CREATE TABLE [{SchemaName}].[{TableName}]
     , [Value] [VARCHAR](511) NOT NULL
     , [ValueType] [VARCHAR](511) NOT NULL
     , [Issuer] [VARCHAR](511) NOT NULL
-    , [ExpiryId] [UNIQUEIDENTIFIER] NOT NULL
-        CONSTRAINT [DF_{TableName}_ExpiryId] DEFAULT NEWSEQUENTIALID()
     , [ExpiryCreatedOn] [DATETIME] NOT NULL
     , [ExpiryModifiedOn] [DATETIME] NOT NULL
     , [ExpiryExpiresOn] [DATETIME] NULL

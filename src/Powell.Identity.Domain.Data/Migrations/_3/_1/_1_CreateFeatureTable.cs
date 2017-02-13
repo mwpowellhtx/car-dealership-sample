@@ -32,8 +32,8 @@ CREATE TABLE [{SchemaName}].[{TableName}]
         REFERENCES [{SchemaName}].[{TableName}] ([Id])
         ON UPDATE NO ACTION ON DELETE NO ACTION
     , [Name] [NVARCHAR](128) NOT NULL
-    , [ExpiryId] [UNIQUEIDENTIFIER] NOT NULL
-        CONSTRAINT [DF_{TableName}_ExpiryId] DEFAULT NEWSEQUENTIALID()
+    , [Description] [NVARCHAR](MAX) NOT NULL
+        CONSTRAINT [DF_{TableName}_Description] DEFAULT N''
     , [ExpiryCreatedOn] [DATETIME] NOT NULL
     , [ExpiryModifiedOn] [DATETIME] NOT NULL
     , [ExpiryExpiresOn] [DATETIME] NULL

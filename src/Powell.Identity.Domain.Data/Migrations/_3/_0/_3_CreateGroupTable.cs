@@ -30,8 +30,8 @@ CREATE TABLE [{SchemaName}].[{TableName}]
         REFERENCES [{SchemaName}].[CredentialBase] ([Id])
         ON UPDATE CASCADE ON DELETE CASCADE
     , [Id] AS [CredentialBaseId]
-    , [Description] [NVARCHAR](MAX) NULL
-        CONSTRAINT [DF_{TableName}_Description] DEFAULT NULL
+    , [Description] [NVARCHAR](MAX) NOT NULL
+        CONSTRAINT [DF_{TableName}_Description] DEFAULT N''
 );");
         }
 

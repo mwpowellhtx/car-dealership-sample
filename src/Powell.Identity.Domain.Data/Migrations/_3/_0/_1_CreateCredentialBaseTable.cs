@@ -29,8 +29,6 @@ CREATE TABLE [{SchemaName}].[{TableName}]
         CONSTRAINT [PK_{TableName}_Id] PRIMARY KEY
         CONSTRAINT [DF_{TableName}_Id] DEFAULT NEWSEQUENTIALID()
     , [Name] [NVARCHAR](128) NOT NULL
-    , [ExpiryId] [UNIQUEIDENTIFIER] NOT NULL
-        CONSTRAINT [DF_{TableName}_ExpiryId] DEFAULT NEWSEQUENTIALID()
     , [ExpiryCreatedOn] [DATETIME] NOT NULL
     , [ExpiryModifiedOn] [DATETIME] NOT NULL
     , [ExpiryExpiresOn] [DATETIME] NULL

@@ -34,10 +34,8 @@ CREATE TABLE [{SchemaName}].[{TableName}]
         CONSTRAINT [FK_{TableName}_Feature] FOREIGN KEY
         REFERENCES [{SchemaName}].[Feature] ([Id])
         ON UPDATE NO ACTION ON DELETE NO ACTION
-    , [Privilege] [INT] NOT NULL
-        CONSTRAINT [DF_{TableName}_Privilege] DEFAULT 0
-    , [ExpiryId] [UNIQUEIDENTIFIER] NOT NULL
-        CONSTRAINT [DF_{TableName}_ExpiryId] DEFAULT NEWSEQUENTIALID()
+    , [Privilege] [INT] NULL
+        CONSTRAINT [DF_{TableName}_Privilege] DEFAULT NULL
     , [ExpiryCreatedOn] [DATETIME] NOT NULL
     , [ExpiryModifiedOn] [DATETIME] NOT NULL
     , [ExpiryExpiresOn] [DATETIME] NULL
