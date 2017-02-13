@@ -44,6 +44,7 @@
     <Compile Include="Collections\Generic\GenericCollectionExtensionMethods.cs" />
     <Compile Include="Collections\Generic\IBidirectionalList.cs" />
     <Compile Include="ExpiringDomainObject.cs" />
+    <Compile Include="Extensions\CollectionExtensionMethods.cs" />
     <Compile Include="ICreatableModel.cs" />
     <Compile Include="TimeStampModel.cs" />
     <Compile Include="ExpiringTimeStampModel.cs" />
