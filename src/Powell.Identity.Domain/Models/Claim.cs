@@ -2,6 +2,7 @@
 
 namespace Powell.Identity.Domain
 {
+    // TODO: TBD: transfer over the claims extension methods as well...
     using ClaimType = System.Security.Claims.Claim;
 
     //TODO: we may need/want System.Security.Claims.ClaimValueTypes as well, or some variation of those from:
