@@ -97,7 +97,7 @@ namespace Powell.Data
             {
                 previousMode = s.CacheMode;
                 s.CacheMode = cacheMode.ToCacheMode();
-                return s.Query<T>();
+                return s.Query<T>().CacheMode(cacheMode.ToCacheMode()); // TODO: TBD: probably the right thing to do here, but be careful of the previous mode...
             }, s =>
             {
                 // Restore from the previous mode or current one if necessary.
