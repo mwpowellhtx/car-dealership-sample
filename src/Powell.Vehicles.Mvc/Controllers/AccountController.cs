@@ -1,55 +1,35 @@
 ﻿using System;
-using System.Globalization;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using Powell.Vehicles.Mvc.Models;
 
-namespace Powell.Vehicles.Mvc.Controllers
+namespace Powell.Vehicles.Controllers
 {
-    [Authorize]
-    public class AccountController : Controller
+    using Identity.Domain;
+    using Managers;
+    using Mvc.Controllers;
+    using Mvc.Models;
+    using static DefaultAuthenticationTypes;
+    using static SignInStatus;
+
+    public class AccountController : AuthorizedController
     {
-        private ApplicationSignInManager _signInManager;
-        private ApplicationUserManager _userManager;
+        private ApplicationSignInManager SignInManager { get; }
 
-        public AccountController()
-        {
-        }
+        private ApplicationUserManager UserManager { get; }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+        private IAuthenticationManager AuthManager { get; }
+
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager,
+            IAuthenticationManager authManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
-        }
-
-        public ApplicationSignInManager SignInManager
-        {
-            get
-            {
-                return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
-            }
-            private set 
-            { 
-                _signInManager = value; 
-            }
-        }
-
-        public ApplicationUserManager UserManager
-        {
-            get
-            {
-                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
-            }
-            private set
-            {
-                _userManager = value;
-            }
+            AuthManager = authManager;
         }
 
         //
@@ -66,28 +46,34 @@ namespace Powell.Vehicles.Mvc.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
+        public async Task<ActionResult> Login(LoginViewModel viewModel, string returnUrl)
         {
             if (!ModelState.IsValid)
             {
-                return View(model);
+                return View(viewModel);
             }
 
+            // TODO: TBD: "PasswordSignInAsync" should be overridden and account for user name or email address...
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            var result = await SignInManager.PasswordSignInAsync(viewModel.UserNameOrEmailAddress, viewModel.Password, viewModel.RememberMe,
+                shouldLockout: false);
+
+            // ReSharper disable once SwitchStatementMissingSomeCases
             switch (result)
             {
-                case SignInStatus.Success:
+                case Success:
                     return RedirectToLocal(returnUrl);
-                case SignInStatus.LockedOut:
+
+                case LockedOut:
                     return View("Lockout");
-                case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
-                case SignInStatus.Failure:
+
+                case RequiresVerification:
+                    return RedirectToAction("SendCode", new {ReturnUrl = returnUrl, RememberMe = viewModel.RememberMe});
+
                 default:
                     ModelState.AddModelError("", "Invalid login attempt.");
-                    return View(model);
+                    return View(viewModel);
             }
         }
 
@@ -101,7 +87,13 @@ namespace Powell.Vehicles.Mvc.Controllers
             {
                 return View("Error");
             }
-            return View(new VerifyCodeViewModel { Provider = provider, ReturnUrl = returnUrl, RememberMe = rememberMe });
+
+            return View(new VerifyCodeViewModel
+            {
+                Provider = provider,
+                ReturnUrl = returnUrl,
+                RememberMe = rememberMe
+            });
         }
 
         //
@@ -120,14 +112,18 @@ namespace Powell.Vehicles.Mvc.Controllers
             // If a user enters incorrect codes for a specified amount of time then the user account 
             // will be locked out for a specified amount of time. 
             // You can configure the account lockout settings in IdentityConfig
-            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent:  model.RememberMe, rememberBrowser: model.RememberBrowser);
+            var result = await SignInManager.TwoFactorSignInAsync(model.Provider,
+                model.Code, isPersistent: model.RememberMe, rememberBrowser: model.RememberBrowser);
+
+            // ReSharper disable once SwitchStatementMissingSomeCases
             switch (result)
             {
-                case SignInStatus.Success:
+                case Success:
                     return RedirectToLocal(model.ReturnUrl);
-                case SignInStatus.LockedOut:
+
+                case LockedOut:
                     return View("Lockout");
-                case SignInStatus.Failure:
+
                 default:
                     ModelState.AddModelError("", "Invalid code.");
                     return View(model);
@@ -149,14 +145,18 @@ namespace Powell.Vehicles.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
+            // ReSharper disable once InvertIf
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-                var result = await UserManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
+                // Should be using UserName for UserName, and so on...
+                var user = new User {UserName = model.UserName, EmailAddress = model.EmailAddress};
+
+                var creation = await UserManager.CreateAsync(user, model.Password);
+
+                if (creation.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
@@ -165,7 +165,8 @@ namespace Powell.Vehicles.Mvc.Controllers
 
                     return RedirectToAction("Index", "Home");
                 }
-                AddErrors(result);
+
+                AddErrors(creation);
             }
 
             // If we got this far, something failed, redisplay form
@@ -175,14 +176,16 @@ namespace Powell.Vehicles.Mvc.Controllers
         //
         // GET: /Account/ConfirmEmail
         [AllowAnonymous]
-        public async Task<ActionResult> ConfirmEmail(string userId, string code)
+        public async Task<ActionResult> ConfirmEmail(Guid userId, string code)
         {
-            if (userId == null || code == null)
+            if (userId.Equals(Guid.Empty) && string.IsNullOrEmpty(code))
             {
                 return View("Error");
             }
+
             var result = await UserManager.ConfirmEmailAsync(userId, code);
-            return View(result.Succeeded ? "ConfirmEmail" : "Error");
+
+            return result.Succeeded ? View("ConfirmEmail") : View("Error");
         }
 
         //
@@ -198,11 +201,15 @@ namespace Powell.Vehicles.Mvc.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ForgotPassword(ForgotPasswordViewModel model)
+        public async Task<ActionResult> ForgotPassword(ForgotPasswordViewModel viewModel)
         {
+            // ReSharper disable once InvertIf
             if (ModelState.IsValid)
             {
-                var user = await UserManager.FindByNameAsync(model.Email);
+                var user
+                    = await UserManager.FindByNameAsync(viewModel.UserNameOrEmailAddress)
+                      ?? await UserManager.FindByEmailAsync(viewModel.UserNameOrEmailAddress);
+
                 if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
                 {
                     // Don't reveal that the user does not exist or is not confirmed
@@ -218,7 +225,7 @@ namespace Powell.Vehicles.Mvc.Controllers
             }
 
             // If we got this far, something failed, redisplay form
-            return View(model);
+            return View(viewModel);
         }
 
         //
@@ -242,24 +249,32 @@ namespace Powell.Vehicles.Mvc.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ResetPassword(ResetPasswordViewModel model)
+        public async Task<ActionResult> ResetPassword(ResetPasswordViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
-                return View(model);
+                return View(viewModel);
             }
-            var user = await UserManager.FindByNameAsync(model.Email);
+
+            var user
+                = await UserManager.FindByNameAsync(viewModel.UserNameOrEmailAddress)
+                  ?? await UserManager.FindByEmailAsync(viewModel.UserNameOrEmailAddress);
+
             if (user == null)
             {
                 // Don't reveal that the user does not exist
                 return RedirectToAction("ResetPasswordConfirmation", "Account");
             }
-            var result = await UserManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
+
+            var result = await UserManager.ResetPasswordAsync(user.Id, viewModel.Code, viewModel.Password);
+
             if (result.Succeeded)
             {
                 return RedirectToAction("ResetPasswordConfirmation", "Account");
             }
+
             AddErrors(result);
+
             return View();
         }
 
@@ -279,7 +294,8 @@ namespace Powell.Vehicles.Mvc.Controllers
         public ActionResult ExternalLogin(string provider, string returnUrl)
         {
             // Request a redirect to the external login provider
-            return new ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
+            return new ChallengeResult(provider,
+                Url.Action("ExternalLoginCallback", "Account", new {ReturnUrl = returnUrl}));
         }
 
         //
@@ -288,13 +304,22 @@ namespace Powell.Vehicles.Mvc.Controllers
         public async Task<ActionResult> SendCode(string returnUrl, bool rememberMe)
         {
             var userId = await SignInManager.GetVerifiedUserIdAsync();
-            if (userId == null)
+
+            if (userId.Equals(Guid.Empty))
             {
                 return View("Error");
             }
+
             var userFactors = await UserManager.GetValidTwoFactorProvidersAsync(userId);
-            var factorOptions = userFactors.Select(purpose => new SelectListItem { Text = purpose, Value = purpose }).ToList();
-            return View(new SendCodeViewModel { Providers = factorOptions, ReturnUrl = returnUrl, RememberMe = rememberMe });
+
+            var factorOptions = userFactors.Select(purpose => new SelectListItem {Text = purpose, Value = purpose}).ToList();
+
+            return View(new SendCodeViewModel
+            {
+                Providers = factorOptions,
+                ReturnUrl = returnUrl,
+                RememberMe = rememberMe
+            });
         }
 
         //
@@ -302,7 +327,7 @@ namespace Powell.Vehicles.Mvc.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> SendCode(SendCodeViewModel model)
+        public async Task<ActionResult> SendCode(SendCodeViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
@@ -310,11 +335,18 @@ namespace Powell.Vehicles.Mvc.Controllers
             }
 
             // Generate the token and send it
-            if (!await SignInManager.SendTwoFactorCodeAsync(model.SelectedProvider))
+            if (!await SignInManager.SendTwoFactorCodeAsync(viewModel.SelectedProvider))
             {
                 return View("Error");
             }
-            return RedirectToAction("VerifyCode", new { Provider = model.SelectedProvider, ReturnUrl = model.ReturnUrl, RememberMe = model.RememberMe });
+
+            return RedirectToAction("VerifyCode",
+                new
+                {
+                    Provider = viewModel.SelectedProvider,
+                    ReturnUrl = viewModel.ReturnUrl,
+                    RememberMe = viewModel.RememberMe
+                });
         }
 
         //
@@ -322,7 +354,8 @@ namespace Powell.Vehicles.Mvc.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> ExternalLoginCallback(string returnUrl)
         {
-            var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync();
+            var loginInfo = await AuthManager.GetExternalLoginInfoAsync();
+
             if (loginInfo == null)
             {
                 return RedirectToAction("Login");
@@ -330,20 +363,28 @@ namespace Powell.Vehicles.Mvc.Controllers
 
             // Sign in the user with this external login provider if the user already has a login
             var result = await SignInManager.ExternalSignInAsync(loginInfo, isPersistent: false);
+
+            // ReSharper disable once SwitchStatementMissingSomeCases
             switch (result)
             {
-                case SignInStatus.Success:
+                case Success:
                     return RedirectToLocal(returnUrl);
-                case SignInStatus.LockedOut:
+
+                case LockedOut:
                     return View("Lockout");
-                case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = false });
-                case SignInStatus.Failure:
+
+                case RequiresVerification:
+                    return RedirectToAction("SendCode", new {ReturnUrl = returnUrl, RememberMe = false});
+
                 default:
                     // If the user does not have an account, then prompt the user to create an account
                     ViewBag.ReturnUrl = returnUrl;
                     ViewBag.LoginProvider = loginInfo.Login.LoginProvider;
-                    return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { Email = loginInfo.Email });
+                    return View("ExternalLoginConfirmation",
+                        new ExternalLoginConfirmationViewModel
+                        {
+                            EmailAddress = loginInfo.Email
+                        });
             }
         }
 
@@ -352,7 +393,8 @@ namespace Powell.Vehicles.Mvc.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ExternalLoginConfirmation(ExternalLoginConfirmationViewModel model, string returnUrl)
+        public async Task<ActionResult> ExternalLoginConfirmation(ExternalLoginConfirmationViewModel viewModel,
+            string returnUrl)
         {
             if (User.Identity.IsAuthenticated)
             {
@@ -362,27 +404,33 @@ namespace Powell.Vehicles.Mvc.Controllers
             if (ModelState.IsValid)
             {
                 // Get the information about the user from the external login provider
-                var info = await AuthenticationManager.GetExternalLoginInfoAsync();
+                var info = await AuthManager.GetExternalLoginInfoAsync();
+
                 if (info == null)
                 {
                     return View("ExternalLoginFailure");
                 }
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-                var result = await UserManager.CreateAsync(user);
-                if (result.Succeeded)
+
+                var user = new User {UserName = viewModel.EmailAddress, EmailAddress = viewModel.EmailAddress};
+
+                var creation = await UserManager.CreateAsync(user);
+
+                if (creation.Succeeded)
                 {
-                    result = await UserManager.AddLoginAsync(user.Id, info.Login);
-                    if (result.Succeeded)
+                    creation = await UserManager.AddLoginAsync(user.Id, info.Login);
+
+                    if (creation.Succeeded)
                     {
                         await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                         return RedirectToLocal(returnUrl);
                     }
                 }
-                AddErrors(result);
+
+                AddErrors(creation);
             }
 
             ViewBag.ReturnUrl = returnUrl;
-            return View(model);
+            return View(viewModel);
         }
 
         //
@@ -391,7 +439,7 @@ namespace Powell.Vehicles.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult LogOff()
         {
-            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            AuthManager.SignOut(ApplicationCookie);
             return RedirectToAction("Index", "Home");
         }
 
@@ -405,35 +453,19 @@ namespace Powell.Vehicles.Mvc.Controllers
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
+            if (disposing && !IsDisposed)
             {
-                if (_userManager != null)
-                {
-                    _userManager.Dispose();
-                    _userManager = null;
-                }
-
-                if (_signInManager != null)
-                {
-                    _signInManager.Dispose();
-                    _signInManager = null;
-                }
+                UserManager?.Dispose();
+                SignInManager?.Dispose();
             }
 
             base.Dispose(disposing);
         }
 
         #region Helpers
+
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
-
-        private IAuthenticationManager AuthenticationManager
-        {
-            get
-            {
-                return HttpContext.GetOwinContext().Authentication;
-            }
-        }
 
         private void AddErrors(IdentityResult result)
         {
@@ -449,17 +481,18 @@ namespace Powell.Vehicles.Mvc.Controllers
             {
                 return Redirect(returnUrl);
             }
+
             return RedirectToAction("Index", "Home");
         }
 
         internal class ChallengeResult : HttpUnauthorizedResult
         {
             public ChallengeResult(string provider, string redirectUri)
-                : this(provider, redirectUri, null)
+                : this(provider, redirectUri, Guid.Empty)
             {
             }
 
-            public ChallengeResult(string provider, string redirectUri, string userId)
+            public ChallengeResult(string provider, string redirectUri, Guid userId)
             {
                 LoginProvider = provider;
                 RedirectUri = redirectUri;
@@ -467,19 +500,24 @@ namespace Powell.Vehicles.Mvc.Controllers
             }
 
             public string LoginProvider { get; set; }
+
             public string RedirectUri { get; set; }
-            public string UserId { get; set; }
+
+            public Guid UserId { get; set; }
 
             public override void ExecuteResult(ControllerContext context)
             {
-                var properties = new AuthenticationProperties { RedirectUri = RedirectUri };
-                if (UserId != null)
+                var properties = new AuthenticationProperties {RedirectUri = RedirectUri};
+
+                if (!UserId.Equals(Guid.Empty))
                 {
-                    properties.Dictionary[XsrfKey] = UserId;
+                    properties.Dictionary[XsrfKey] = UserId.ToString("D");
                 }
                 context.HttpContext.GetOwinContext().Authentication.Challenge(properties, LoginProvider);
             }
         }
+
         #endregion
+
     }
 }

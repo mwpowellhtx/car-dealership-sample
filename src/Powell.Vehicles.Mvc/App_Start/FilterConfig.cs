@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using System.Web.Mvc;
 
-namespace Powell.Vehicles.Mvc
+namespace Powell.Vehicles
 {
     public class FilterConfig
     {

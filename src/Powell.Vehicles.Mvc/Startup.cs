@@ -1,8 +1,8 @@
 ﻿using Microsoft.Owin;
 using Owin;
 
-[assembly: OwinStartupAttribute(typeof(Powell.Vehicles.Mvc.Startup))]
-namespace Powell.Vehicles.Mvc
+[assembly: OwinStartup(typeof(Powell.Vehicles.Startup))]
+namespace Powell.Vehicles
 {
     public partial class Startup
     {
