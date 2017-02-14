@@ -30,7 +30,12 @@ ON [{SchemaName}].[{TableName}]
 INSTEAD OF DELETE
 AS BEGIN
     SET NOCOUNT ON;
-    DELETE FROM [{SchemaName}].[ModelYear] WHERE [ModelId] IN (SELECT [Id] FROM [DELETED])
+
+    DELETE FROM [{SchemaName}].[ModelYear]
+        WHERE [ModelId] IN (SELECT [Id] FROM [DELETED])
+
+    DELETE FROM [{SchemaName}].[{TableName}]
+        WHERE [Id] IN (SELECT [Id] FROM [DELETED])
 END;");
         }
 
