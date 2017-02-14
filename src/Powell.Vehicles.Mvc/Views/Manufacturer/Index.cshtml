@@ -1,0 +1,95 @@
+﻿@model IEnumerable<Powell.Vehicles.Mvc.Manufacturer.ManufacturerViewModel>
+@{
+    ViewBag.Title = "Manufacturers";
+}
+
+<h2>@ViewBag.Title.</h2>
+
+<p class="text-success">@ViewBag.StatusMessage</p>
+
+<script type="text/javascript">
+
+    $(function() {
+        $("#btn-add-manufacturer")
+            .click(function() {
+
+                var div2 = $("<div>")
+                    .prop("id", "div-add-manufacturer")
+                    .append(
+                        $("<p>").append("Manufacturer:"),
+                        $("<p>").append(
+                            $("<input>")
+                            .prop("type", "text")
+                            .prop("name", "manufacuter-name")
+                            .prop("id", "inp-manufacturer-name")
+                            .prop("width", "250")
+                        )
+                    );
+
+                var div = $("#div-add-manufacturer");
+
+                div2.dialog({
+                        title: "Add Manufacturer",
+                        modal: true,
+                        buttons: [
+                            {
+                                text: "OK",
+                                click: function() {
+                                    $.post("/Manufacturer/Add", { name: $("#inp-manufacturer-name").val() })
+                                        .done(function() {
+                                            window.location.reload();
+                                        });
+                                }
+                            }
+                        ],
+                        open: function() {
+                            $(".ui-dialog-titlebar-close").hide();
+                        },
+                        close: function() {
+                            $(this).dialog("destroy").remove();
+                        }
+                    })
+                    .keydown(function(event) {
+                        if (event.keyCode === 13) {
+                            @* eq(0) is close; so eq(1) in this case is "OK". *@
+                            $(this).parent()
+                                .find("button:eq(1)").trigger("click");
+                            return false;
+                        }
+                    })
+                    .dialog("open");
+            });
+    });
+
+</script>
+
+<button type="submit" id="btn-add-manufacturer" title="Add Manufacturer">
+    <span class="glyphicon glyphicon-plus"></span>
+</button>
+
+<!--
+<div id="div-add-manufacturer" hidden>
+    <p>Manufacturer:</p>
+    <p><input type="text" id="inp-manufacturer-name" name="manufacturer-name" width="150" /></p>
+</div>
+-->
+
+<div>
+    <table>
+
+        @for (var i = 0; i < Model.Count(); i++)
+        {
+            if (i == 0)
+            {
+                <tr>
+                    <th>@Html.LabelFor(x => x.ElementAt(i).Name)</th>
+                </tr>
+            }
+
+            <tr>
+                <td>@Html.DisplayTextFor(x => x.ElementAt(i).Name)</td>
+            </tr>
+        }
+
+    </table>
+</div>

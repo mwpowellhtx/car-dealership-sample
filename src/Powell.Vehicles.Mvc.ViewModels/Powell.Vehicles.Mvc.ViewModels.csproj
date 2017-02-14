@@ -85,6 +85,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Mvc\Manufacturer\IManufacturerMapperConfiguration.cs" />
+    <Compile Include="Mvc\Manufacturer\ManufacturerViewModels.cs" />
+    <Compile Include="Mvc\Manufacturer\ManufacturerMapperConfiguration.cs" />
     <Compile Include="Mvc\Models\IdentityViewModels.cs" />
     <Compile Include="Mvc\Models\AccountViewModels.cs" />
     <Compile Include="Mvc\Models\ManageViewModels.cs" />
