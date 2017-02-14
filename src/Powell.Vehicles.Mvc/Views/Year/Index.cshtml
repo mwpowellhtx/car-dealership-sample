@@ -28,12 +28,15 @@
 <div>
     <table>
 
-        <tr>
-            <th>Year</th>
-        </tr>
-
         @for (var i = 0; i < Model.Count(); i++)
         {
+            if (i == 0)
+            {
+                <tr>
+                    <th>@Html.LabelFor(x => x.ElementAt(i).Year)</th>
+                </tr>
+            }
+
             <tr>
                 <td>@Html.DisplayTextFor(x => x.ElementAt(i).Year)</td>
             </tr>
