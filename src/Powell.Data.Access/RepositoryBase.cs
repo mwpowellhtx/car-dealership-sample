@@ -43,7 +43,7 @@ namespace Powell.Data
         public virtual IEnumerable<T> Query<T>(Func<T, bool> predicate,
             RepositoryCacheMode cacheMode = DefaultCacheMode)
             where T : class, new()
-            => from x in Query<T>(cacheMode) where predicate(x) select x;
+            => Query<T>(cacheMode).Where(predicate);
 
         private static bool DefaultPredicate<T>(T item) => true;
 
