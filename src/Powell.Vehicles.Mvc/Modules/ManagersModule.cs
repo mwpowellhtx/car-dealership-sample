@@ -25,6 +25,10 @@ namespace Powell.Vehicles.Modules
             builder.Register(context => HttpContext.Current.GetOwinContext().Authentication)
                 .As<IAuthenticationManager>()
                 .InstancePerRequest();
+
+            builder.RegisterType<YearManager>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
         }
     }
 }

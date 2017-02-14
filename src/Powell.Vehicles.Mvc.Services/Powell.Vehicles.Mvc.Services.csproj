@@ -97,12 +97,20 @@
     <Compile Include="Disposable.cs" />
     <Compile Include="Managers\ApplicationSignInManager.cs" />
     <Compile Include="Managers\ApplicationUserExtensionMethods.cs" />
+    <Compile Include="Managers\ControllerManager.cs" />
+    <Compile Include="Managers\HibernateManagerBase.cs" />
+    <Compile Include="Managers\IControllerManager.cs" />
+    <Compile Include="Managers\IHibernateManagerBase.cs" />
+    <Compile Include="Managers\IManager.cs" />
+    <Compile Include="Managers\IYearManager.cs" />
+    <Compile Include="Managers\ManagerBase.cs" />
     <Compile Include="Managers\ManagerHelper.cs" />
     <Compile Include="Managers\ApplicationUserManager.cs" />
     <Compile Include="Managers\ApplicationFeatureManager.cs" />
     <Compile Include="Managers\FeatureManagerBase.cs" />
     <Compile Include="Managers\SignInManagerBase.cs" />
     <Compile Include="Managers\UserManagerBase.cs" />
+    <Compile Include="Managers\YearManager.cs" />
     <Compile Include="Mvc\Identity\ICompositeFeatureRepository.cs" />
     <Compile Include="Mvc\Identity\IIdentityFeatureStore.cs" />
     <Compile Include="Mvc\Identity\IIdentityRepository.cs" />
@@ -143,6 +151,10 @@
     <ProjectReference Include="..\Powell.Identity.Domain\Powell.Identity.Domain.csproj">
       <Project>{DD20EF3E-707F-498F-8436-F3D5B4CAFD4C}</Project>
       <Name>Powell.Identity.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Powell.Vehicles.Domain\Powell.Vehicles.Domain.csproj">
+      <Project>{A64C067A-3B0D-4718-90AF-D994C7BB3DE0}</Project>
+      <Name>Powell.Vehicles.Domain</Name>
     </ProjectReference>
     <ProjectReference Include="..\Powell.Vehicles.Mvc.ViewModels\Powell.Vehicles.Mvc.ViewModels.csproj">
       <Project>{765ED74F-1C42-4CD7-B718-864B5A83D68D}</Project>

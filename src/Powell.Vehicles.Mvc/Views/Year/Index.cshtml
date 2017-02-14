@@ -1,0 +1,43 @@
+﻿@model IEnumerable<Powell.Vehicles.Mvc.Year.YearViewModel>
+@{
+    ViewBag.Title = "Model Years";
+}
+
+<h2>@ViewBag.Title.</h2>
+
+<p class="text-success">@ViewBag.StatusMessage</p>
+
+<script type="text/javascript">
+
+    $(function() {
+        $("#btn-add-years")
+            .click(function() {
+                $.post("/Year/Add")
+                    .done(function() {
+                        window.location.reload();
+                    });
+            });
+    });
+
+</script>
+
+<button type="submit" id="btn-add-years" title="Add Years">
+    <span class="glyphicon glyphicon-plus"></span>
+</button>
+
+<div>
+    <table>
+
+        <tr>
+            <th>Year</th>
+        </tr>
+
+        @for (var i = 0; i < Model.Count(); i++)
+        {
+            <tr>
+                <td>@Html.DisplayTextFor(x => x.ElementAt(i).Year)</td>
+            </tr>
+        }
+
+    </table>
+</div>
