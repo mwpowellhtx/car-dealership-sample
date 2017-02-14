@@ -7,5 +7,6 @@ _ReSharper.Caches/
 
 *.suo
 *.DotSettings
+*.user
 
 *.odt#
