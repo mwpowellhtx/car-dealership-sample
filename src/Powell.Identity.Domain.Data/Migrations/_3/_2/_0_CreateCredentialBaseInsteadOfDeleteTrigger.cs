@@ -3,12 +3,12 @@
 namespace Powell.Identity.Domain.Migrations._3._2
 {
     /// <summary>
-    /// Re-creates the CredentialBase After Delete Trigger.
+    /// Re-creates the CredentialBase Instead Of Delete Trigger.
     /// </summary>
     [Migration(3, 2, 0)]
-    public class _0_CreateCredentialBaseAfterDeleteTrigger : SqlServerSecurityMigrationBase
+    public class _0_CreateCredentialBaseInsteadOfDeleteTrigger : SqlServerSecurityMigrationBase
     {
-        public _0_CreateCredentialBaseAfterDeleteTrigger(SqlConnection connection)
+        public _0_CreateCredentialBaseInsteadOfDeleteTrigger(SqlConnection connection)
             : base(connection)
         {
         }
@@ -20,9 +20,9 @@ namespace Powell.Identity.Domain.Migrations._3._2
 
         public override void Up()
         {
-            Sql($@"CREATE TRIGGER [{SchemaName}].[TR_{TableName}_AfterDelete]
+            Sql($@"CREATE TRIGGER [{SchemaName}].[TR_{TableName}_InsteadOfDelete]
    ON [{SchemaName}].[{TableName}]
-   AFTER DELETE
+   INSTEAD OF DELETE
 AS 
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -42,13 +42,17 @@ BEGIN
 
     DELETE FROM [{SchemaName}].[Group]
         WHERE [{TableName}Id] IN (SELECT [Id] FROM deleted);
+
+    -- Rememer to also delete itself when INSTEAD OF DELETE
+    DELETE FROM [Security].[CredentialBase]
+        WHERE [Id] IN (SELECT [Id] FROM deleted);
 END");
         }
 
         public override void Down()
         {
-            Sql($@"IF OBJECT_ID(N'[{SchemaName}].[TR_{TableName}_AfterDelete]') IS NOT NULL
-DROP TRIGGER [{SchemaName}].[TR_{TableName}_AfterDelete];");
+            Sql($@"IF OBJECT_ID(N'[{SchemaName}].[TR_{TableName}_InsteadOfDelete]') IS NOT NULL
+DROP TRIGGER [{SchemaName}].[TR_{TableName}_InsteadOfDelete];");
         }
     }
 }
