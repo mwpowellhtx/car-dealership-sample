@@ -102,12 +102,14 @@
     <Compile Include="Managers\IControllerManager.cs" />
     <Compile Include="Managers\IHibernateManagerBase.cs" />
     <Compile Include="Managers\IManager.cs" />
+    <Compile Include="Managers\IManufacturerManager.cs" />
     <Compile Include="Managers\IYearManager.cs" />
     <Compile Include="Managers\ManagerBase.cs" />
     <Compile Include="Managers\ManagerHelper.cs" />
     <Compile Include="Managers\ApplicationUserManager.cs" />
     <Compile Include="Managers\ApplicationFeatureManager.cs" />
     <Compile Include="Managers\FeatureManagerBase.cs" />
+    <Compile Include="Managers\ManufacturerManager.cs" />
     <Compile Include="Managers\SignInManagerBase.cs" />
     <Compile Include="Managers\UserManagerBase.cs" />
     <Compile Include="Managers\YearManager.cs" />
