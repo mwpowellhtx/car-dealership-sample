@@ -50,6 +50,10 @@ namespace Powell.Vehicles.Modules
                 .WithParameters(GetRepositorySessionProviderParameters())
                 .OnActivating(args => args.Instance.Assemblies = GetRepositorySessionProviderAssemblies().ToArray())
                 .SingleInstance();
+
+            builder.RegisterType<Repository>()
+                .AsImplementedInterfaces()
+                .InstancePerDependency();
         }
     }
 }
