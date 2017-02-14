@@ -6,6 +6,8 @@ namespace Powell
     {
         public virtual Guid Id { get; set; }
 
+        public virtual bool IsTransient => Id.Equals(Guid.Empty);
+
         protected DomainObject()
         {
             Initialize();
