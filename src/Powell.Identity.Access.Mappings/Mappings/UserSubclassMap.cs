@@ -14,7 +14,7 @@ namespace Powell.Identity
             KeyColumn(@"CredentialBaseId");
             Map(x => x.EmailAddress).CustomSqlType("VARCHAR").Length(64 + 254 + 1).Not.Nullable();
             Map(x => x.IsLockedOut, "LockedOut").Not.Nullable();
-            Map(x => x.LockoutExpiryUtc).Not.Nullable();
+            Map(x => x.LockoutExpiryUtc).Nullable();
             Map(x => x.PasswordHash).CustomSqlType("VARCHAR").Length(511).Not.Nullable();
             Map(x => x.AccessFailedCount).Not.Nullable();
             Map(x => x.SecurityStamp).Not.Nullable();
