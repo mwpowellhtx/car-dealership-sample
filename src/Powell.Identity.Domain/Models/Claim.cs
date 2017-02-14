@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Powell.Identity.Domain
+﻿namespace Powell.Identity.Domain
 {
     // TODO: TBD: transfer over the claims extension methods as well...
     using ClaimType = System.Security.Claims.Claim;
@@ -24,7 +22,7 @@ namespace Powell.Identity.Domain
         public virtual string TypeUri { get; set; }
 
         /// <summary>
-        /// Gets or sets the <see cref="String"/> representation of the Claim.
+        /// Gets or sets the <see cref="System.String"/> representation of the Claim.
         /// </summary>
         public virtual string Value { get; protected internal set; }
 
@@ -57,42 +55,6 @@ namespace Powell.Identity.Domain
         public static implicit operator ClaimType(Claim claim)
         {
             return new ClaimType(claim.TypeUri, claim.Value, claim.ValueType, claim.Issuer);
-        }
-    }
-
-    internal static class ClaimExtensionMethods
-    {
-        private static Claim SetValue<T>(this Claim claim, T value)
-        {
-            claim.Value = value.ToString();
-            //TODO: fill in the supported type here.
-            claim.ValueType = null;
-            return claim;
-        }
-
-        public static Claim SetValue(this Claim claim, object value)
-        {
-            //TODO: this may work out: then filter by "types"
-            return claim.SetValue(value as string)
-                    .SetValue(value as int?)
-                    .SetValue(value as DateTime?)
-                ;
-        }
-
-        private static object GetValue<T>(this Claim claim, Func<string, T> getter)
-        {
-            return claim.ValueType.Equals(typeof(T).Name)
-                ? getter(claim.Value)
-                : (object) null;
-        }
-
-        public static object GetValue(this Claim claim)
-        {
-            return claim.GetValue(x => x)
-                   ?? claim.GetValue(long.Parse)
-                   ?? claim.GetValue(int.Parse)
-                   ?? claim.GetValue(DateTime.Parse)
-                ;
         }
     }
 }
