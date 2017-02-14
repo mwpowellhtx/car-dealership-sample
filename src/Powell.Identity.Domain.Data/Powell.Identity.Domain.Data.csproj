@@ -52,7 +52,7 @@
     <Compile Include="Migrations\_3\_2\_3_CreateGroupAfterDeleteTrigger.cs" />
     <Compile Include="Migrations\_3\_2\_2_CreateUserAfterDeleteTrigger.cs" />
     <Compile Include="Migrations\_3\_2\_1_CreateFeatureAfterDeleteTrigger.cs" />
-    <Compile Include="Migrations\_3\_2\_0_CreateCredentialBaseAfterDeleteTrigger.cs" />
+    <Compile Include="Migrations\_3\_2\_0_CreateCredentialBaseInsteadOfDeleteTrigger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Migrations\SqlServerSecurityMigrationBase.cs" />
   </ItemGroup>
