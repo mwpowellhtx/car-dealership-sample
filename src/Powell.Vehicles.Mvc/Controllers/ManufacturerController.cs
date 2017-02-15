@@ -8,6 +8,7 @@ namespace Powell.Vehicles.Controllers
     using Managers;
     using Mvc.Controllers;
     using Mvc.Manufacturer;
+    using static JsonRequestBehavior;
 
     public class ManufacturerController : AuthorizedController
     {
@@ -15,6 +16,7 @@ namespace Powell.Vehicles.Controllers
 
         private IMapper Mapper { get; }
 
+        // ReSharper disable once SuggestBaseTypeForParameter
         public ManufacturerController(IManufacturerManager manufacturerManager, IManufacturerMapperConfiguration mapperConfiguration)
         {
             ManufacturerManager = manufacturerManager;
@@ -37,6 +39,15 @@ namespace Powell.Vehicles.Controllers
             await ManufacturerManager.SaveOrUpdateAsync(new Manufacturer {Name = name});
 
             return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> Get()
+        {
+            var viewModels = (await ManufacturerManager.GetAllAsync<Manufacturer>()).Select(
+                Mapper.Map<Manufacturer, ManufacturerViewModel>).ToArray();
+
+            return Json(viewModels, AllowGet);
         }
     }
 }
