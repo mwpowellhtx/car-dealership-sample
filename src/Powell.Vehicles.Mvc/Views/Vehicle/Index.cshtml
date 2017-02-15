@@ -228,6 +228,7 @@
     <table>
 
         <tr>
+            <th>@Html.LabelFor(x => x.FirstOrDefault().Year)</th>
             <th>@Html.LabelFor(x => x.FirstOrDefault().ManufacturerName)</th>
             <th>@Html.LabelFor(x => x.FirstOrDefault().ModelName)</th>
             <th colspan="2">@Html.LabelFor(x => x.FirstOrDefault().ColorName)</th>
@@ -241,8 +242,9 @@
             <tr class="top-alignment">
                 <td>
                     @Html.HiddenFor(x => x.ElementAt(i).Id, new {id=$"vehicle-id-{Model.ElementAt(i).Id:D}"})
-                    @Html.DisplayTextFor(x => x.ElementAt(i).ManufacturerName)
+                    @Html.DisplayTextFor(x => x.ElementAt(i).Year)
                 </td>
+                <td>@Html.DisplayTextFor(x => x.ElementAt(i).ManufacturerName)</td>
                 <td>@Html.DisplayTextFor(x => x.ElementAt(i).ModelName)</td>
                 <td>@Html.DisplayTextFor(x => x.ElementAt(i).ColorName)</td>
                 <td>
