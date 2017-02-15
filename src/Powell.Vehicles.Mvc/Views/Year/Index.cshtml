@@ -1,11 +1,21 @@
 ﻿@model IEnumerable<Powell.Vehicles.Mvc.Year.YearViewModel>
 @{
-    ViewBag.Title = "Model Years";
+    ViewBag.Title = "Available Years";
 }
 
 <h2>@ViewBag.Title.</h2>
 
 <p class="text-success">@ViewBag.StatusMessage</p>
+
+<script type="text/javascript">
+
+    $(function() {
+        var div = $("div[id='div-years']");
+        div.find("table,th,td").addClass("table-spacing");
+        div.find("tr").addClass("table-greenbar");
+    });
+
+</script>
 
 <script type="text/javascript">
 
@@ -25,18 +35,15 @@
     <span class="glyphicon glyphicon-plus"></span>
 </button>
 
-<div>
+<div id="div-years">
     <table>
+
+        <tr>
+            <th>@Html.LabelFor(x => x.FirstOrDefault().Year)</th>
+        </tr>
 
         @for (var i = 0; i < Model.Count(); i++)
         {
-            if (i == 0)
-            {
-                <tr>
-                    <th>@Html.LabelFor(x => x.ElementAt(i).Year)</th>
-                </tr>
-            }
-
             <tr>
                 <td>@Html.DisplayTextFor(x => x.ElementAt(i).Year)</td>
             </tr>
