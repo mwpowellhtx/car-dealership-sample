@@ -85,6 +85,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Mvc\Vehicle\IVehicleMapperConfiguration.cs" />
+    <Compile Include="Mvc\Vehicle\VehicleMapperConfiguration.cs" />
+    <Compile Include="Mvc\Vehicle\VehicleViewModels.cs" />
     <Compile Include="Mvc\Manufacturer\IManufacturerMapperConfiguration.cs" />
     <Compile Include="Mvc\Manufacturer\ManufacturerViewModels.cs" />
     <Compile Include="Mvc\Manufacturer\ManufacturerMapperConfiguration.cs" />

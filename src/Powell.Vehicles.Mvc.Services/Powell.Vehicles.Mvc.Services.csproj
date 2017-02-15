@@ -106,6 +106,7 @@
     <Compile Include="Managers\IModelManager.cs" />
     <Compile Include="Managers\IModelYearManager.cs" />
     <Compile Include="Managers\IPaintManager.cs" />
+    <Compile Include="Managers\IVehicleManager.cs" />
     <Compile Include="Managers\IYearManager.cs" />
     <Compile Include="Managers\ManagerBase.cs" />
     <Compile Include="Managers\ManagerHelper.cs" />
@@ -118,6 +119,7 @@
     <Compile Include="Managers\PaintManager.cs" />
     <Compile Include="Managers\SignInManagerBase.cs" />
     <Compile Include="Managers\UserManagerBase.cs" />
+    <Compile Include="Managers\VehicleManager.cs" />
     <Compile Include="Managers\YearManager.cs" />
     <Compile Include="Mvc\Identity\ICompositeFeatureRepository.cs" />
     <Compile Include="Mvc\Identity\IIdentityFeatureStore.cs" />
