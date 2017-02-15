@@ -91,6 +91,15 @@
     <Compile Include="Mvc\Models\IdentityViewModels.cs" />
     <Compile Include="Mvc\Models\AccountViewModels.cs" />
     <Compile Include="Mvc\Models\ManageViewModels.cs" />
+    <Compile Include="Mvc\ModelYear\IModelYearMapperConfiguration.cs" />
+    <Compile Include="Mvc\ModelYear\ModelYearMapperConfiguration.cs" />
+    <Compile Include="Mvc\ModelYear\ModelYearViewModels.cs" />
+    <Compile Include="Mvc\Model\IModelMapperConfiguration.cs" />
+    <Compile Include="Mvc\Model\ModelViewModels.cs" />
+    <Compile Include="Mvc\Model\ModelMapperConfiguration.cs" />
+    <Compile Include="Mvc\Paint\IPaintMapperConfiguration.cs" />
+    <Compile Include="Mvc\Paint\PaintMapperConfiguration.cs" />
+    <Compile Include="Mvc\Paint\PaintViewModels.cs" />
     <Compile Include="Mvc\Year\IYearMapperConfiguration.cs" />
     <Compile Include="Mvc\Year\YearMapperConfiguration.cs" />
     <Compile Include="Mvc\Year\YearViewModels.cs" />
@@ -99,9 +108,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Mvc\Models\Mappings\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Powell.Domain.Core\Powell.Domain.Core.csproj">
       <Project>{073CAAB8-13D2-4AD2-9BE3-C3B113D5F90B}</Project>
