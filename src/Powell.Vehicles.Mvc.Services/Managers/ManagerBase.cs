@@ -60,5 +60,17 @@ namespace Powell.Vehicles.Managers
         {
             return Task.Run(() => SaveOrUpdate(items));
         }
+
+        public virtual void Delete<T>(params T[] items)
+            where T : class, new()
+        {
+            Transact(r => r.Delete(items));
+        }
+
+        public virtual Task DeleteAsync<T>(params T[] items)
+            where T : class, new()
+        {
+            return Task.Run(() => Delete(items));
+        }
     }
 }

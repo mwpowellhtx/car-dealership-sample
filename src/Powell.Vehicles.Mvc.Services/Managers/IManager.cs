@@ -20,5 +20,11 @@ namespace Powell.Vehicles.Managers
 
         Task SaveOrUpdateAsync<T>(params T[] items)
             where T : class, new();
+
+        void Delete<T>(params T[] items)
+            where T : class, new();
+
+        Task DeleteAsync<T>(params T[] items)
+            where T : class, new();
     }
 }
