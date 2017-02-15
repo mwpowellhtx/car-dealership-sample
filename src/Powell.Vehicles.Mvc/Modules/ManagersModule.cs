@@ -45,6 +45,10 @@ namespace Powell.Vehicles.Modules
             builder.RegisterType<PaintManager>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
+
+            builder.RegisterType<VehicleManager>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
         }
     }
 }

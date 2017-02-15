@@ -5,6 +5,7 @@
     using Mvc.Model;
     using Mvc.ModelYear;
     using Mvc.Paint;
+    using Mvc.Vehicle;
     using Mvc.Year;
 
     public class AutoMapperModule : Module
@@ -30,6 +31,10 @@
                 .SingleInstance();
 
             builder.RegisterType<PaintMapperConfiguration>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
+            builder.RegisterType<VehicleMapperConfiguration>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
         }

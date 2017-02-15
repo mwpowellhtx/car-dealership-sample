@@ -91,3 +91,15 @@ table.table-spacing {
 tr.table-greenbar:nth-of-type(2n+2) {
     background: #e4ffc7;
 }
+
+tr.top-alignment {
+    vertical-align: top;
+}
+
+input.field-validation-error {
+    background-color: red;
+}
+
+input.error {
+    border: 1px solid red !important;
+}

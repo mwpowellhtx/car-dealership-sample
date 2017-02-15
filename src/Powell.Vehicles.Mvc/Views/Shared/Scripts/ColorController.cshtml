@@ -8,6 +8,8 @@
 
             this.__listeners = [];
 
+            this.__modelYearColors = [];
+
             this.__findColorById = function(id) {
                 return this.__colors.find(function(c) { return c.Id === id; });
             };
@@ -59,6 +61,19 @@
                 sel.parents("tr").find("td div.swatch").attr("data-background-color-id", colorId);
                 ctrl.refreshSwatches();
                 return this;
+            };
+
+            this.registerModelYears = function(modelYears) {
+                var ctrl = this;
+                ctrl.__modelYearColors = $.map(modelYears,
+                    function(my) {
+                        return { Id: my.Id, ColorId: my.ColorId };
+                    });
+                return this;
+            };
+
+            this.findModelYearColorById = function(id) {
+                return this.__modelYearColors.find(function(myc) { return myc.Id === id; });
             };
         }
     }

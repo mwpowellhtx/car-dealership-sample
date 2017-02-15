@@ -199,6 +199,7 @@
     <Compile Include="Controllers\ModelController.cs" />
     <Compile Include="Controllers\ModelYearController.cs" />
     <Compile Include="Controllers\PaintController.cs" />
+    <Compile Include="Controllers\VehicleController.cs" />
     <Compile Include="Controllers\YearController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -316,6 +317,7 @@
     <Content Include="Views\Manufacturer\Index.cshtml" />
     <Content Include="Views\ModelYear\Index.cshtml" />
     <Content Include="Views\Shared\Scripts\ColorController.cshtml" />
+    <Content Include="Views\Vehicle\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
