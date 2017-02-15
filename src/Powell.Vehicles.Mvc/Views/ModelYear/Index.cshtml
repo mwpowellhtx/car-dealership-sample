@@ -208,18 +208,18 @@
     <table>
 
         <tr>
+            <th>@Html.LabelFor(x => x.FirstOrDefault().Year)</th>
             <th>@Html.LabelFor(x => x.FirstOrDefault().ManufacturerName)</th>
             <th>@Html.LabelFor(x => x.FirstOrDefault().ModelName)</th>
-            <th>@Html.LabelFor(x => x.FirstOrDefault().Year)</th>
             <th>@Html.LabelFor(x => x.FirstOrDefault().ColorName, new { colspan = 2 })</th>
         </tr>
 
         @for (var i = 0; i < Model.Count(); i++)
         {
             <tr>
+                <td>@Html.DisplayTextFor(x => x.ElementAt(i).Year)</td>
                 <td>@Html.DisplayTextFor(x => x.ElementAt(i).ManufacturerName)</td>
                 <td>@Html.DisplayTextFor(x => x.ElementAt(i).ModelName)</td>
-                <td>@Html.DisplayTextFor(x => x.ElementAt(i).Year)</td>
                 <td>@Html.DisplayTextFor(x => x.ElementAt(i).ColorName)</td>
                 <td>
                     <div class="swatch" data-background-color-id="@(Model.ElementAt(i).ColorId)"></div>
