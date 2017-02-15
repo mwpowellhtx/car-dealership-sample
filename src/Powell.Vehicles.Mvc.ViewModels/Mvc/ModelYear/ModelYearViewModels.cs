@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Powell.Vehicles.Mvc.ModelYear
@@ -28,14 +27,19 @@ namespace Powell.Vehicles.Mvc.ModelYear
         public string ColorValue { get; set; }
     }
 
-    public class RequestModelYearsRequestModel
+    public class AddModelYearRequestModel
     {
         public Guid ModelId { get; set; }
+
+        public Guid ColorId { get; set; }
+
+        public int Year { get; set; }
     }
 
-    [Serializable]
-    public class AvailableYearsResponseModel
+    public class ModelYearResponseModel
     {
+        public Guid Id { get; set; }
+
         public Guid ManufacturerId { get; set; }
 
         public string ManufacturerName { get; set; }
@@ -44,20 +48,19 @@ namespace Powell.Vehicles.Mvc.ModelYear
 
         public string ModelName { get; set; }
 
-        public List<int> Years { get; set; }
-
-        public AvailableYearsResponseModel()
-        {
-            Years = new List<int>();
-        }
-    }
-
-    public class AddModelYearRequestModel
-    {
-        public Guid ModelId { get; set; }
+        public int Year { get; set; }
 
         public Guid ColorId { get; set; }
 
-        public int Year { get; set; }
+        public string ColorName { get; set; }
+
+        public string ColorValue { get; set; }
+
+        public string Summary => $"{Year} {ManufacturerName} {ModelName} ({ColorName})";
+
+        public ModelYearResponseModel()
+        {
+            ManufacturerName = ModelName = ColorName = string.Empty;
+        }
     }
 }

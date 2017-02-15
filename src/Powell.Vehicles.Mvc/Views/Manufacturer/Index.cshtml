@@ -65,8 +65,9 @@
                             @* eq(0) is close; so eq(1) in this case is "OK". *@
                             $(this).parent()
                                 .find("button:eq(1)").trigger("click");
+                            return false;
                         }
-                        return false;
+                        return undefined;
                     })
                     .dialog("open");
             });

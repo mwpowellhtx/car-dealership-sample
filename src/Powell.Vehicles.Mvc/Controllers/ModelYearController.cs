@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -54,8 +53,9 @@ namespace Powell.Vehicles.Controllers
                 x => x.Year.Value.Year == viewModel.Year
                      && x.Model.Id == viewModel.ModelId)).First();
 
+            // Remember, the Color Id is what we want here not the joining table.
             // ReSharper disable once InvertIf
-            if (modelYear.Colors.All(x => x.Id != viewModel.ColorId))
+            if (modelYear.Colors.All(x => x.Color.Id != viewModel.ColorId))
             {
                 var color = (await ModelYearManager.GetAllAsync<Paint>(x => x.Id == viewModel.ColorId)).Single();
                 ModelYearManager.SaveOrUpdateAsync(new ModelYearColor {ModelYear = modelYear, Color = color}).Wait();
@@ -66,19 +66,16 @@ namespace Powell.Vehicles.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Get(RequestModelYearsRequestModel requestModel)
+        public async Task<ActionResult> Get()
         {
-            var model = (await ModelYearManager.GetAllAsync<Model>(x => x.Id == requestModel.ModelId)).Single();
+            var responseModels = (await ModelYearManager.GetAllAsync<ModelYearColor>())
+                .Select(Mapper.Map<ModelYearColor, ModelYearResponseModel>)
+                .OrderBy(x => x.ManufacturerName)
+                .ThenBy(x => x.ModelName)
+                .ThenByDescending(x => x.Year)
+                .ThenBy(x => x.ColorName).ToArray();
 
-            var availableYears = (await ModelYearManager.GetAvailableYears(model.ModelYears)).ToArray();
-
-            var responseModel = Mapper.Map<Model, AvailableYearsResponseModel>(model
-                , opts => opts.AfterMap(
-                    (s, d) => d.Years = availableYears.Select(x => x.Value.Year).OrderByDescending(x => x).ToList()
-                )
-            );
-
-            return Json(responseModel, AllowGet);
+            return Json(responseModels, AllowGet);
         }
     }
 }

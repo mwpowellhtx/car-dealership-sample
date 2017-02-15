@@ -28,13 +28,6 @@
             })
             @* ReSharper disable once PossiblyUnassignedProperty *@
             .getColorsFromServer();
-
-        @* ReSharper disable once PossiblyUnassignedProperty *@
-        /*
-            var colorId = $("#inp-sel-color option:selected").val();
-            var color = colors.find(function(c) { return c.Id === colorId; });
-            $("#inp-color-swatch").attr("style", "background-color: " + color.Value);
-        */
     });
 
 </script>
@@ -88,6 +81,8 @@
 
                 div.dialog({
                         title: "Add Model Year",
+                        height: "auto",
+                        width: "auto",
                         modal: true,
                         buttons: [
                             {
@@ -108,9 +103,7 @@
                         open: function() {
 
                             $(".ui-dialog-titlebar-close").hide();
-
-                            //$("select[id^='inp-sel-']").css("position", "relative").css("z-index", zIdx + 1);
-
+                            @* TODO: TBD: these could potentially be deferred to controllers of their own... *@
                             @* Model and Year must be populated once Manufacturer and Model are known, respectively. *@
                             $("#inp-sel-manufacturer")
                                 .selectmenu({
@@ -137,7 +130,7 @@
                                 .selectmenu({
                                     select: function() {
                                         var modelId = $("#inp-sel-model option:selected").val();
-                                        $.get("/ModelYear/Get",
+                                        $.get("/Model/GetAvailableYears",
                                             { modelId },
                                             function(data) {
                                                 var sel = $("#inp-sel-year");
@@ -196,8 +189,9 @@
                             @* eq(0) is close; so eq(1) in this case is "OK". *@
                             $(this).parent()
                                 .find("button:eq(1)").trigger("click");
+                            return false;
                         }
-                        return false;
+                        return undefined;
                     })
                     .addClass("reveal-modal")
                     .dialog("open");

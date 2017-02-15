@@ -17,6 +17,14 @@ namespace Powell.Vehicles.Mvc.Model
                 .ForMember(d => d.ModelId, o => o.MapFrom(s => s.Id))
                 .ForMember(d => d.ModelName, o => o.MapFrom(s => s.Name))
                 ;
+
+            // Leave it to the controller (really, the manager) to fill in the Years gap.
+            cfg.CreateMap<Vehicles.Model, AvailableYearsResponseModel>()
+                .ForMember(d => d.ManufacturerId, o => o.MapFrom(s => s.Make.Id))
+                .ForMember(d => d.ManufacturerName, o => o.MapFrom(s => s.Make.Name))
+                .ForMember(d => d.ModelId, o => o.MapFrom(s => s.Id))
+                .ForMember(d => d.ModelName, o => o.MapFrom(s => s.Name))
+                ;
         }
     }
 }

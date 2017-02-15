@@ -32,5 +32,23 @@ namespace Powell.Vehicles.Controllers
 
             return Json(models, AllowGet);
         }
+
+        [HttpGet]
+        public async Task<ActionResult> GetAvailableYears(AvailableYearsRequestModel requestModel)
+        {
+            var model = (await ModelManager.GetAllAsync<Model>(x => x.Id== requestModel.ModelId)).Single();
+
+            var availableYears = (await ModelManager.GetAvailableYears(model.ModelYears)).ToArray();
+
+            var responseModel = Mapper.Map<Model, AvailableYearsResponseModel>(model
+                , opts => opts.AfterMap(
+                    (s, d) => d.Years = availableYears.Select(x => x.Value.Year)
+                        .OrderByDescending(x => x).ToList()
+                )
+            );
+
+            return Json(responseModel, AllowGet);
+        }
+
     }
 }
