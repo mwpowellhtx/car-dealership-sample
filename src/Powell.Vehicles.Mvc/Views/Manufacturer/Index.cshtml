@@ -10,10 +10,20 @@
 <script type="text/javascript">
 
     $(function() {
+        var div = $("div[id='div-manufacturers']");
+        div.find("table,th,td").addClass("table-spacing");
+        div.find("tr").addClass("table-greenbar");
+    });
+
+</script>
+
+<script type="text/javascript">
+
+    $(function() {
         $("#btn-add-manufacturer")
             .click(function() {
 
-                var div2 = $("<div>")
+                var div = $("<div>")
                     .prop("id", "div-add-manufacturer")
                     .append(
                         $("<p>").append("Manufacturer:"),
@@ -26,16 +36,17 @@
                         )
                     );
 
-                var div = $("#div-add-manufacturer");
-
-                div2.dialog({
+                div.dialog({
                         title: "Add Manufacturer",
                         modal: true,
                         buttons: [
                             {
                                 text: "OK",
                                 click: function() {
-                                    $.post("/Manufacturer/Add", { name: $("#inp-manufacturer-name").val() })
+                                    $.post("/Manufacturer/Add",
+                                        {
+                                            name: $("#inp-manufacturer-name").val()
+                                        })
                                         .done(function() {
                                             window.location.reload();
                                         });
@@ -54,8 +65,8 @@
                             @* eq(0) is close; so eq(1) in this case is "OK". *@
                             $(this).parent()
                                 .find("button:eq(1)").trigger("click");
-                            return false;
                         }
+                        return false;
                     })
                     .dialog("open");
             });
@@ -74,18 +85,15 @@
 </div>
 -->
 
-<div>
+<div id="div-manufacturers">
     <table>
+
+        <tr>
+            <th>@Html.LabelFor(x => x.FirstOrDefault().Name)</th>
+        </tr>
 
         @for (var i = 0; i < Model.Count(); i++)
         {
-            if (i == 0)
-            {
-                <tr>
-                    <th>@Html.LabelFor(x => x.ElementAt(i).Name)</th>
-                </tr>
-            }
-
             <tr>
                 <td>@Html.DisplayTextFor(x => x.ElementAt(i).Name)</td>
             </tr>
