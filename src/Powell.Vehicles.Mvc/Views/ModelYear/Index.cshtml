@@ -1,0 +1,237 @@
+﻿@model IEnumerable<Powell.Vehicles.Mvc.ModelYear.ModelYearViewModel>
+@{
+    ViewBag.Title = "Model Years";
+}
+
+@Html.Partial("Scripts/ColorController")
+
+<h2>@ViewBag.Title.</h2>
+
+<p class="text-success">@ViewBag.StatusMessage</p>
+
+<p>Arrange the Manufacturer, Model, and available year in combination to describe the production year during which the Model was made by the Manufacturer.</p>
+
+<script type="text/javascript">
+
+    $(function() {
+        @* ReSharper disable once UseOfImplicitGlobalInFunctionScope *@
+        colorCtrl
+            @* ReSharper disable once PossiblyUnassignedProperty *@
+            .subscribe(function(colors) {
+                @* ReSharper disable once UseOfImplicitGlobalInFunctionScope, PossiblyUnassignedProperty *@
+                colorCtrl.refreshSwatches();
+            })
+            @* ReSharper disable once PossiblyUnassignedProperty *@
+            .subscribe(function(colors) {
+                @* ReSharper disable once UseOfImplicitGlobalInFunctionScope, PossiblyUnassignedProperty *@
+                colorCtrl.populateSelectmenu($("#inp-sel-color"));
+            })
+            @* ReSharper disable once PossiblyUnassignedProperty *@
+            .getColorsFromServer();
+
+        @* ReSharper disable once PossiblyUnassignedProperty *@
+        /*
+            var colorId = $("#inp-sel-color option:selected").val();
+            var color = colors.find(function(c) { return c.Id === colorId; });
+            $("#inp-color-swatch").attr("style", "background-color: " + color.Value);
+        */
+    });
+
+</script>
+
+<script type="text/javascript">
+
+    $(function() {
+        var div = $("div[id='div-model-years']");
+        div.find("table").addClass("table-spacing");
+        div.find("tr").addClass("table-greenbar");
+        div.find("th").addClass("table-spacing");
+        div.find("td").addClass("table-spacing");
+    });
+
+</script>
+
+<script type="text/javascript">
+
+    $(function() {
+        $("#btn-add-model-year")
+            .click(function() {
+
+                var div = $("<div>")
+                    .prop("id", "div-add-model-year")
+                    .append(
+                        $("<table>")
+                        .append(
+                            $("<tr>")
+                            .append(
+                                $("<td>").append($("<label>").prop("for", "sel-manufacturer").html("Manufacturer")),
+                                $("<td>").append($("<select>").prop("name", "sel-manufacturer").prop("id", "inp-sel-manufacturer"))
+                            ),
+                            $("<tr>")
+                            .append(
+                                $("<td>").append($("<label>").prop("for", "sel-model").html("Model")),
+                                $("<td>").append($("<select>").prop("name", "sel-model").prop("id", "inp-sel-model"))
+                            ),
+                            $("<tr>")
+                            .append(
+                                $("<td>").append($("<label>").prop("for", "sel-year").html("Year")),
+                                $("<td>").append($("<select>").prop("name", "sel-year").prop("id", "inp-sel-year"))
+                            ),
+                            $("<tr>")
+                            .append(
+                                $("<td>").append($("<label>").prop("for", "sel-color").html("Color")),
+                                $("<td>").append($("<select>").prop("name", "sel-color").prop("id", "inp-sel-color")),
+                                $("<td>").append($("<div>").addClass("swatch").prop("id", "inp-color-swatch"))
+                            )
+                        )
+                    );
+
+                div.dialog({
+                        title: "Add Model Year",
+                        modal: true,
+                        buttons: [
+                            {
+                                text: "OK",
+                                click: function() {
+                                    $.post("/ModelYear/Add",
+                                        {
+                                            modelId: $("#inp-sel-model option:selected").val(),
+                                            year: parseInt($("#inp-sel-year option:selected").val()),
+                                            colorId: $("#inp-sel-color option:selected").val()
+                                        })
+                                        .done(function() {
+                                            window.location.reload();
+                                        });
+                                }
+                            }
+                        ],
+                        open: function() {
+
+                            $(".ui-dialog-titlebar-close").hide();
+
+                            //$("select[id^='inp-sel-']").css("position", "relative").css("z-index", zIdx + 1);
+
+                            @* Model and Year must be populated once Manufacturer and Model are known, respectively. *@
+                            $("#inp-sel-manufacturer")
+                                .selectmenu({
+                                    select: function() {
+                                        var manufacturerId = $("#inp-sel-manufacturer option:selected").val();
+                                        $.get("/Model/Get",
+                                            { manufacturerId },
+                                            function(data) {
+                                                var sel = $("#inp-sel-model");
+                                                sel.find("option").remove();
+                                                $.each(data,
+                                                    function(i, d) {
+                                                        sel.append($("<option>").val(d.ModelId).html(d.ModelName));
+                                                    });
+                                                if (data.length) {
+                                                    @* ReSharper disable once PossiblyUnassignedProperty *@
+                                                    sel.val(data[0].Id).selectmenu("refresh");
+                                                }
+                                            });
+                                    }
+                                });
+
+                            $("#inp-sel-model")
+                                .selectmenu({
+                                    select: function() {
+                                        var modelId = $("#inp-sel-model option:selected").val();
+                                        $.get("/ModelYear/Get",
+                                            { modelId },
+                                            function(data) {
+                                                var sel = $("#inp-sel-year");
+                                                sel.find("option").remove();
+                                                $.each(data.Years,
+                                                    function(i, y) {
+                                                        sel.append($("<option>").val(y).html(y));
+                                                    });
+                                                if (data.Years.length) {
+                                                    sel.val(data.Years[0]).selectmenu("refresh");
+                                                }
+                                            });
+                                    }
+                                });
+
+                            $("#inp-sel-year").selectmenu();
+
+                            $("#inp-sel-color").selectmenu({
+                                select: function() {
+                                    var sel = $(this);
+                                    @* Remember, this is the Paint.Id, not the color value itself. *@
+                                    sel.parents("tr")
+                                        .find("div.swatch")
+                                        @* ReSharper disable once UseOfImplicitGlobalInFunctionScope, PossiblyUnassignedProperty *@
+                                        .attr("data-background-color-id", sel.find("option:selected").val());
+                                    @* Then refresh the swatches via the Color Controller. *@
+                                    @* ReSharper disable once UseOfImplicitGlobalInFunctionScope, PossiblyUnassignedProperty *@
+                                    colorCtrl.refreshSwatches();
+                                }
+                            });
+
+                            @* Prepare Manufacturer and Paint (Colors) with populated lists. *@
+                            $.get("/Manufacturer/Get")
+                                .done(function(data) {
+                                    var sel = $("#inp-sel-manufacturer");
+                                    sel.find("option").remove();
+                                    $.each(data,
+                                        function(i, d) {
+                                            sel.append($("<option>").val(d.Id).html(d.Name));
+                                        });
+                                    if (data.length) {
+                                        @* ReSharper disable once PossiblyUnassignedProperty *@
+                                        sel.val(data[0].Id).selectmenu("refresh");
+                                    }
+                                }).then(function() {
+                                    @* ReSharper disable once UseOfImplicitGlobalInFunctionScope, PossiblyUnassignedProperty *@
+                                    colorCtrl.populateSelectmenu($("#inp-sel-color"));
+                                });
+                        },
+                        close: function() {
+                            $(this).dialog("destroy").remove();
+                        }
+                    })
+                    .keydown(function(event) {
+                        if (event.keyCode === 13) {
+                            @* eq(0) is close; so eq(1) in this case is "OK". *@
+                            $(this).parent()
+                                .find("button:eq(1)").trigger("click");
+                        }
+                        return false;
+                    })
+                    .addClass("reveal-modal")
+                    .dialog("open");
+            });
+    });
+
+</script>
+
+<button type="submit" id="btn-add-model-year" title="Add Model Year">
+    <span class="glyphicon glyphicon-plus"></span>
+</button>
+
+<div id="div-model-years">
+    <table>
+
+        <tr>
+            <th>@Html.LabelFor(x => x.FirstOrDefault().ManufacturerName)</th>
+            <th>@Html.LabelFor(x => x.FirstOrDefault().ModelName)</th>
+            <th>@Html.LabelFor(x => x.FirstOrDefault().Year)</th>
+            <th>@Html.LabelFor(x => x.FirstOrDefault().ColorName, new { colspan = 2 })</th>
+        </tr>
+
+        @for (var i = 0; i < Model.Count(); i++)
+        {
+            <tr>
+                <td>@Html.DisplayTextFor(x => x.ElementAt(i).ManufacturerName)</td>
+                <td>@Html.DisplayTextFor(x => x.ElementAt(i).ModelName)</td>
+                <td>@Html.DisplayTextFor(x => x.ElementAt(i).Year)</td>
+                <td>@Html.DisplayTextFor(x => x.ElementAt(i).ColorName)</td>
+                <td>
+                    <div class="swatch" data-background-color-id="@(Model.ElementAt(i).ColorId)"></div>
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
