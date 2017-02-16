@@ -20,3 +20,31 @@ next up:
 bonus round:
 
 * decide whether and/or what sort of serialization is required, i.e. for wizardly navigation...
+
+
+1:23 PM 2/14/2017
+
+after numerous updates...
+
+remember to add the following links:
+
+Year/
+Manufacturer/
+TODO: Model/
+
+let's just fast forward to a more interesting controller: ModelYear
+
+ModelYear/
+Vehicle/
+
+
+9:40 PM 2/15/2017
+
+Could spend a little time adding a side bar and/or menu strategy.
+
+For interview purposes, the following pattern is used to demo the features in browser:
+
+<uri/>/Year
+<uri/>/Manufacturer
+<uri/>/ModelYear
+<uri/>/Vehicle
