@@ -31,8 +31,8 @@ div.swatch {
     border-style: solid;
     border-width: 1px;
     border-color: black;
-    height: 32px;
-    width: 32px;
+    height: 16px;
+    width: 16px;
 }
 
 /* TODO: TBD: it's not pretty, but this kind of works around an issue with a faulty drop down rendering in a modal dialog */

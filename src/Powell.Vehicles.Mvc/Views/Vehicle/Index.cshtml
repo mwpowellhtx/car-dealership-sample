@@ -53,11 +53,28 @@
 <script type="text/javascript">
     @* TODO: TBD: should seriously consider factoring this into a ViewController... especially for adding new / editing existing... *@
     $(function() {
+
         $("#btn-add-vehicle")
             .click(function() {
                 @* ReSharper disable once UseOfImplicitGlobalInFunctionScope, PossiblyUnassignedProperty *@
                 vehicleCtrl.addNewVehicle();
             });
+
+        $("button[id^='btn-edit-vehicle-']")
+            .click(function() {
+                var tr = $(this).parents("tr");
+                @* Gather up the necessary elements for the Vehicle. This is where a data binding framework may come in handy. *@
+                var vehicle = {
+                    VehicleId: tr.find("input[data-vehicle-id]").attr("data-vehicle-id"),
+                    ModelYearColorId: tr.find("input[data-modelyearcolor-id]").attr("data-modelyearcolor-id"),
+                    ColorId: tr.find("div.swatch").attr("data-background-color-id"),
+                    Mileage: parseFloat(tr.find("span[data-mileage]").text()),
+                    Description: tr.find("span[data-description]").text()
+                };
+                @* ReSharper disable once UseOfImplicitGlobalInFunctionScope, PossiblyUnassignedProperty *@
+                vehicleCtrl.editVehicle(vehicle);
+            });
+
     });
 
 </script>
@@ -70,7 +87,7 @@
             .click(function() {
                 var dlg = $(this);
                 var getVehicleId = function () {
-                    return dlg.parents("tr").find("input[id^='vehicle-id-']").val();
+                    return dlg.parents("tr").find("input[data-vehicle-id]").attr("data-vehicle-id");
                 };
                 $("<div>")
                     .append(
@@ -127,17 +144,31 @@
         {
             <tr class="top-alignment">
                 <td>
-                    @Html.HiddenFor(x => x.ElementAt(i).Id, new {id=$"vehicle-id-{Model.ElementAt(i).Id:D}"})
+                    @Html.HiddenFor(x => x.ElementAt(i).Id, new Dictionary<string, object>
+                    {
+                        { "data-vehicle-id", $"{Model.ElementAt(i).Id:D}" }
+                    })
                     @Html.DisplayTextFor(x => x.ElementAt(i).Year)
                 </td>
                 <td>@Html.DisplayTextFor(x => x.ElementAt(i).ManufacturerName)</td>
                 <td>@Html.DisplayTextFor(x => x.ElementAt(i).ModelName)</td>
-                <td>@Html.DisplayTextFor(x => x.ElementAt(i).ColorName)</td>
+                <td>
+                    @Html.HiddenFor(x => x.ElementAt(i).ModelYearColorId, new Dictionary<string, object>
+                    {
+                        { "data-modelyearcolor-id", $"{Model.ElementAt(i).ModelYearColorId:D}" },
+                    })
+                    @Html.DisplayTextFor(x => x.ElementAt(i).ColorName)
+                </td>
                 <td>
                     <div class="swatch" data-background-color-id="@(Model.ElementAt(i).ColorId)"></div>
                 </td>
-                <td>@Html.DisplayTextFor(x => x.ElementAt(i).Mileage)</td>
-                <td>@Html.DisplayTextFor(x => x.ElementAt(i).Description)</td>
+                <td><span data-mileage>@(Model.ElementAt(i).Mileage)</span></td>
+                <td><span data-description>@(Model.ElementAt(i).Description)</span></td>
+                <td>
+                    <button type="submit" id="btn-edit-vehicle-@($"{Model.ElementAt(i).Id:D}")" title="Edit Vehicle">
+                        <span class="glyphicon glyphicon-edit"></span>
+                    </button>
+                </td>
                 <td>
                     <button type="submit" id="btn-delete-vehicle-@($"{Model.ElementAt(i).Id:D}")" title="Delete Vehicle">
                         <span class="glyphicon glyphicon-trash"></span>

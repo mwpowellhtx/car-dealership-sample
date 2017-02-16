@@ -42,11 +42,12 @@
                     );
             };
 
-            this.__createDialog = function() {
+            this.__createDialog = function(opts) {
+                var ctrl = this;
                 var colorCtrl = this.__colorCtrl;
                 return this.__createDialogDiv()
                     .dialog({
-                        title: "Add Vehicle",
+                        title: opts.title,
                         height: "auto",
                         width: "auto",
                         modal: true,
@@ -59,14 +60,19 @@
                                         $("#inp-mileage").focus();
                                         return false;
                                     }
-                                    $.post("/Vehicle/Add",
-                                        {
-                                            @* Remember to align the parameters with the correct shape. *@
-                                            modelYearColorId: $("#inp-sel-modelyear option:selected").val(),
-                                            colorId: $("#inp-sel-color option:selected").val(),
-                                            mileage,
-                                            description: $("#inp-description").val()
-                                        })
+                                    var args = {
+                                        @* Remember to align the parameters with the correct shape. *@
+                                        modelYearColorId: $("#inp-sel-modelyear option:selected").val(),
+                                        colorId: $("#inp-sel-color option:selected").val(),
+                                        mileage,
+                                        description: $("#inp-description").val()
+                                    };
+                                    if (opts.vehicle !== undefined) {
+                                        @* Remember the VehicleId when editing. *@
+                                        @* ReSharper disable once PossiblyUnassignedProperty *@
+                                        args.vehicleId = opts.vehicle.VehicleId;
+                                    }
+                                    $.post(opts.uri, args)
                                         .done(function() {
                                             window.location.reload();
                                         });
@@ -105,24 +111,38 @@
                             });
 
                             $.get("/ModelYear/Get",
-                                function(data) {
+                                    function(data) {
+                                        @* ReSharper disable once UseOfImplicitGlobalInFunctionScope, PossiblyUnassignedProperty *@
+                                        colorCtrl.registerModelYears(data);
+                                        var sel = $("#inp-sel-modelyear");
+                                        sel.find("option").remove();
+                                        $.each(data,
+                                            function(i, d) {
+                                                @* TODO: TBD: Summary is sufficient here; for fancier stylistic drop downs, that's another matter... *@
+                                                sel.append($("<option>").val(d.Id).html(d.Summary));
+                                            });
+                                        if (opts.vehicle !== undefined) {
+                                            @* ReSharper disable once PossiblyUnassignedProperty *@
+                                            sel.val(opts.vehicle.ModelYearColorId).selectmenu("refresh");
+                                        } else if (data.length) {
+                                            @* ReSharper disable once PossiblyUnassignedProperty *@
+                                            sel.val(data[0].Id).selectmenu("refresh");
+                                        }
+                                    })
+                                .then(function() {
                                     @* ReSharper disable once UseOfImplicitGlobalInFunctionScope, PossiblyUnassignedProperty *@
-                                    colorCtrl.registerModelYears(data);
-                                    var sel = $("#inp-sel-modelyear");
-                                    sel.find("option").remove();
-                                    $.each(data,
-                                        function(i, d) {
-                                            @* TODO: TBD: Summary is sufficient here; for fancier stylistic drop downs, that's another matter... *@
-                                            sel.append($("<option>").val(d.Id).html(d.Summary));
-                                        });
-                                    if (data.length) {
+                                    colorCtrl.populateSelectmenu($("#inp-sel-color"));
+                                })
+                                .then(function() {
+                                    if (opts.vehicle !== undefined) {
                                         @* ReSharper disable once PossiblyUnassignedProperty *@
-                                        sel.val(data[0].Id).selectmenu("refresh");
+                                        $("#inp-sel-color").val(opts.vehicle.ColorId).selectmenu("refresh");
+                                        @* ReSharper disable once PossiblyUnassignedProperty *@
+                                        $("#inp-mileage").val(opts.vehicle.Mileage);
+                                        @* ReSharper disable once PossiblyUnassignedProperty *@
+                                        $("#inp-description").val(opts.vehicle.Description);
                                     }
-                                }).then(function() {
-                                @* ReSharper disable once UseOfImplicitGlobalInFunctionScope, PossiblyUnassignedProperty *@
-                                colorCtrl.populateSelectmenu($("#inp-sel-color"));
-                            });
+                                });
                         },
                         close: function() {
                             $(this).dialog("destroy").remove();
@@ -141,7 +161,11 @@
             };
 
             this.addNewVehicle = function() {
-                this.__createDialog().dialog("open");
+                this.__createDialog({ title: "Add Vehicle", uri: "/Vehicle/Add" }).dialog("open");
+            };
+
+            this.editVehicle = function(vehicle) {
+                this.__createDialog({ vehicle, title: "Edit Vehicle", uri: "/Vehicle/Update" }).dialog("open");
             };
         }
     }

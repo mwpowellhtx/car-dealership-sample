@@ -29,6 +29,11 @@ namespace Powell.Vehicles.Mvc.Vehicle
                 .ForMember(d => d.Mileage, o => o.MapFrom(s => s.Mileage))
                 .ForMember(d => d.Description, o => o.MapFrom(s => s.Description))
                 ;
+
+            cfg.CreateMap<UpdateVehicleRequestModel, Vehicles.Vehicle>()
+                .ForMember(d => d.Mileage, o => o.MapFrom(s => s.Mileage))
+                .ForMember(d => d.Description, o => o.MapFrom(s => s.Description))
+                ;
         }
     }
 }
