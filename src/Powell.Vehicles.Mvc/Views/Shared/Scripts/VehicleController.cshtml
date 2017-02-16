@@ -1,0 +1,153 @@
+﻿
+<script type="text/javascript">
+
+    if (VehicleController === undefined) {
+        var VehicleController = function() {
+
+            this.__colorCtrl = null;
+
+            this.setColorCtrl = function(colorCtrl) {
+                this.__colorCtrl = colorCtrl;
+                return this;
+            };
+
+            this.__createDialogDiv = function() {
+                return $("<div>")
+                    .prop("id", "div-add-vehicle")
+                    .append(
+                        $("<table>")
+                        .append(
+                            $("<tr>")
+                            .append(
+                                $("<td>").append($("<label>").prop("for", "sel-modelyear").html("Model")),
+                                $("<td>").append($("<select>").prop("name", "sel-modelyear").prop("id", "inp-sel-modelyear"))
+                            ),
+                            $("<tr>")
+                            .append(
+                                $("<td>").append($("<label>").prop("for", "sel-color").html("Color")),
+                                $("<td>").append($("<select>").prop("name", "sel-color").prop("id", "inp-sel-color")),
+                                $("<td>").append($("<div>").addClass("swatch").prop("id", "inp-color-swatch"))
+                            ),
+                            $("<tr>")
+                            .append(
+                                $("<td>").append($("<label>").prop("for", "inp-mileage").html("Mileage")),
+                                $("<td>").append($("<input>").prop("colspan", 2).prop("name", "inp-mileage").prop("id", "inp-mileage").prop("type", "number").prop("title", "Please enter a positive number."))
+                            ),
+                            $("<tr>")
+                            .append(
+                                $("<td>").append($("<label>").prop("for", "inp-description").html("Description")),
+                                $("<td>").append($("<input>").prop("colspan", 2).prop("name", "inp-description").prop("id", "inp-description").prop("type", "text"))
+                            )
+                        )
+                    );
+            };
+
+            this.__createDialog = function() {
+                var colorCtrl = this.__colorCtrl;
+                return this.__createDialogDiv()
+                    .dialog({
+                        title: "Add Vehicle",
+                        height: "auto",
+                        width: "auto",
+                        modal: true,
+                        buttons: [
+                            {
+                                text: "OK",
+                                click: function() {
+                                    var mileage = parseFloat($("#inp-mileage").val());
+                                    if (isNaN(mileage) || mileage < 0) {
+                                        $("#inp-mileage").focus();
+                                        return false;
+                                    }
+                                    $.post("/Vehicle/Add",
+                                        {
+                                            @* Remember to align the parameters with the correct shape. *@
+                                            modelYearColorId: $("#inp-sel-modelyear option:selected").val(),
+                                            colorId: $("#inp-sel-color option:selected").val(),
+                                            mileage,
+                                            description: $("#inp-description").val()
+                                        })
+                                        .done(function() {
+                                            window.location.reload();
+                                        });
+                                }
+                            }
+                        ],
+                        open: function() {
+                            $(".ui-dialog-titlebar-close").hide();
+                            @* TODO: TBD: these could potentially be deferred to controllers of their own... *@
+                            @* Model and Year must be populated once Manufacturer and Model are known, respectively. *@
+                            $("#inp-sel-modelyear")
+                                .selectmenu({
+                                    select: function() {
+                                        var modelYearId = $("#inp-sel-modelyear option:selected").val();
+                                        @* ReSharper disable once UseOfImplicitGlobalInFunctionScope, PossiblyUnassignedProperty *@
+                                        var colorId = colorCtrl.findModelYearColorById(modelYearId).ColorId;
+                                        $("#inp-sel-color").val(colorId).selectmenu("refresh");
+                                        $("#inp-sel-color").parents("tr").find("div.swatch").attr("data-background-color-id", colorId);
+                                        @* ReSharper disable once UseOfImplicitGlobalInFunctionScope, PossiblyUnassignedProperty *@
+                                        colorCtrl.refreshSwatches();
+                                    }
+                                });
+
+                            $("#inp-sel-color").selectmenu({
+                                select: function() {
+                                    var sel = $(this);
+                                    @* Remember, this is the Paint.Id, not the color value itself. *@
+                                    sel.parents("tr")
+                                        .find("div.swatch")
+                                        @* ReSharper disable once UseOfImplicitGlobalInFunctionScope, PossiblyUnassignedProperty *@
+                                        .attr("data-background-color-id", sel.find("option:selected").val());
+                                    @* Then refresh the swatches via the Color Controller. *@
+                                    @* ReSharper disable once UseOfImplicitGlobalInFunctionScope, PossiblyUnassignedProperty *@
+                                    colorCtrl.refreshSwatches();
+                                }
+                            });
+
+                            $.get("/ModelYear/Get",
+                                function(data) {
+                                    @* ReSharper disable once UseOfImplicitGlobalInFunctionScope, PossiblyUnassignedProperty *@
+                                    colorCtrl.registerModelYears(data);
+                                    var sel = $("#inp-sel-modelyear");
+                                    sel.find("option").remove();
+                                    $.each(data,
+                                        function(i, d) {
+                                            @* TODO: TBD: Summary is sufficient here; for fancier stylistic drop downs, that's another matter... *@
+                                            sel.append($("<option>").val(d.Id).html(d.Summary));
+                                        });
+                                    if (data.length) {
+                                        @* ReSharper disable once PossiblyUnassignedProperty *@
+                                        sel.val(data[0].Id).selectmenu("refresh");
+                                    }
+                                }).then(function() {
+                                @* ReSharper disable once UseOfImplicitGlobalInFunctionScope, PossiblyUnassignedProperty *@
+                                colorCtrl.populateSelectmenu($("#inp-sel-color"));
+                            });
+                        },
+                        close: function() {
+                            $(this).dialog("destroy").remove();
+                        }
+                    })
+                    .keydown(function(event) {
+                        if (event.keyCode === 13) {
+                            @* eq(0) is close; so eq(1) in this case is "OK". *@
+                            $(this).parent()
+                                .find("button:eq(1)").trigger("click");
+                            return false;
+                        }
+                        return undefined;
+                    })
+                    .addClass("reveal-modal");
+            };
+
+            this.addNewVehicle = function() {
+                this.__createDialog().dialog("open");
+            };
+        }
+    }
+
+    if (vehicleCtrl === undefined) {
+        var vehicleCtrl = new VehicleController();
+    }
+
+</script>
