@@ -59,11 +59,11 @@ namespace Powell.Vehicles.Controllers
         public async Task<ActionResult> Add(AddVehicleRequestModel requestModel)
         {
             // Remember this Controller operates from ModelYearColor perspective for starters.
-            var modelYearColor = (await VehicleManager.GetAllAsync<ModelYearColor>(
-                x => x.Id == requestModel.ModelYearColorId)).SingleOrDefault();
+            var modelYearColor = await VehicleManager.GetOneOrDefaultAsync<ModelYearColor>(
+                x => x.Id == requestModel.ModelYearColorId);
 
-            var color = (await VehicleManager.GetAllAsync<Paint>(
-                x => x.Id == requestModel.ColorId)).SingleOrDefault();
+            var color = await VehicleManager.GetOneOrDefaultAsync<Paint>(
+                x => x.Id == requestModel.ColorId);
 
             // ReSharper disable once InvertIf
             if (!(modelYearColor == null || color == null))
@@ -79,17 +79,17 @@ namespace Powell.Vehicles.Controllers
         [HttpPost]
         public async Task<ActionResult> Update(UpdateVehicleRequestModel requestModel)
         {
-            var vehicle = (await VehicleManager.GetAllAsync<Vehicle>(
-                x => x.Id == requestModel.VehicleId)).SingleOrDefault();
+            var vehicle = await VehicleManager.GetOneOrDefaultAsync<Vehicle>(
+                x => x.Id == requestModel.VehicleId);
 
             // ReSharper disable once InvertIf
             if (vehicle != null)
             {
-                var modelYearColor = (await VehicleManager.GetAllAsync<ModelYearColor>(
-                    x => x.Id == requestModel.ModelYearColorId)).SingleOrDefault();
+                var modelYearColor = await VehicleManager.GetOneOrDefaultAsync<ModelYearColor>(
+                    x => x.Id == requestModel.ModelYearColorId);
 
-                var color = (await VehicleManager.GetAllAsync<Paint>(
-                    x => x.Id == requestModel.ColorId)).SingleOrDefault();
+                var color = await VehicleManager.GetOneOrDefaultAsync<Paint>(
+                    x => x.Id == requestModel.ColorId);
 
                 if (!(modelYearColor == null || color == null))
                 {
