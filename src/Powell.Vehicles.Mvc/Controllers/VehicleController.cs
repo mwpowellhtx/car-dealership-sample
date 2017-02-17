@@ -76,6 +76,7 @@ namespace Powell.Vehicles.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
         public async Task<ActionResult> Update(UpdateVehicleRequestModel requestModel)
         {
             var vehicle = (await VehicleManager.GetAllAsync<Vehicle>(
