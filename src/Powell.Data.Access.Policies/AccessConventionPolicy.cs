@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using FluentNHibernate.Conventions.Helpers;
 
 namespace Powell.Data.Access.Policies
 {
     using FluentNHibernate.Conventions;
-    using FluentNHibernate.Conventions.Helpers;
+    using static ConventionBuilder;
 
     public class AccessConventionPolicy : ConventionPolicyBase, IAccessConventionPolicy
     {
@@ -18,19 +19,19 @@ namespace Powell.Data.Access.Policies
             yield return Table.Is(x => x.EntityType.Name);
 
             // TODO: TBD: does not seem to be taking? having to specify Id column?
-            yield return ConventionBuilder.Id.Always(x => x.Column("Id"));
+            yield return Id.Always(x => x.Column("Id"));
 
-            yield return ConventionBuilder.HasMany.Always(x => x.Cascade.AllDeleteOrphan());
+            yield return HasMany.Always(x => x.Cascade.AllDeleteOrphan());
 
-            yield return ConventionBuilder.HasMany.Always(x => x.LazyLoad());
+            yield return HasMany.Always(x => x.LazyLoad());
 
-            yield return ConventionBuilder.HasMany.Always(x => x.Inverse());
+            yield return HasMany.Always(x => x.Inverse());
 
-            yield return ConventionBuilder.HasMany.Always(x => x.AsBag());
+            yield return HasMany.Always(x => x.AsBag());
 
-            yield return ConventionBuilder.Reference.Always(x => x.LazyLoad());
+            yield return Reference.Always(x => x.LazyLoad());
 
-            yield return ConventionBuilder.Reference.Always(x => x.Cascade.All());
+            yield return Reference.Always(x => x.Cascade.All());
 
             //// TODO: TBD: not strong enough:
             //yield return ForeignKey.EndsWith("Id");
