@@ -48,6 +48,30 @@ namespace Powell.Vehicles.Managers
             return Task.Run(() => GetAll(predicate, cacheMode));
         }
 
+        public virtual T GetOne<T>(Func<T, bool> predicate = null, RepositoryCacheMode cacheMode = Normal)
+            where T : class, new()
+        {
+            return GetAll(predicate, cacheMode).Single();
+        }
+
+        public virtual Task<T> GetOneAsync<T>(Func<T, bool> predicate = null, RepositoryCacheMode cacheMode = Normal)
+            where T : class, new()
+        {
+            return Task.Run(() => GetOne(predicate, cacheMode));
+        }
+
+        public virtual T GetOneOrDefault<T>(Func<T, bool> predicate = null, RepositoryCacheMode cacheMode = Normal)
+            where T : class, new()
+        {
+            return GetAll(predicate, cacheMode).SingleOrDefault();
+        }
+
+        public virtual Task<T> GetOneOrDefaultAsync<T>(Func<T, bool> predicate = null, RepositoryCacheMode cacheMode = Normal)
+            where T : class, new()
+        {
+            return Task.Run(() => GetOneOrDefault(predicate, cacheMode));
+        }
+
         public virtual void SaveOrUpdate<T>(params T[] items)
             where T : class, new()
         {

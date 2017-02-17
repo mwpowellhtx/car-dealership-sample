@@ -15,6 +15,18 @@ namespace Powell.Vehicles.Managers
         Task<IEnumerable<T>> GetAllAsync<T>(Func<T, bool> predicate = null, RepositoryCacheMode cacheMode = Normal)
             where T : class, new();
 
+        T GetOne<T>(Func<T, bool> predicate = null, RepositoryCacheMode cacheMode = Normal)
+            where T : class, new();
+
+        Task<T> GetOneAsync<T>(Func<T, bool> predicate = null, RepositoryCacheMode cacheMode = Normal)
+            where T : class, new();
+
+        T GetOneOrDefault<T>(Func<T, bool> predicate = null, RepositoryCacheMode cacheMode = Normal)
+            where T : class, new();
+
+        Task<T> GetOneOrDefaultAsync<T>(Func<T, bool> predicate = null, RepositoryCacheMode cacheMode = Normal)
+            where T : class, new();
+
         void SaveOrUpdate<T>(params T[] items)
             where T : class, new();
 
