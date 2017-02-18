@@ -3,6 +3,7 @@
     ViewBag.Title = "Vehicles";
 }
 
+@Html.Partial("Scripts/CursorController")
 @Html.Partial("Scripts/ColorController")
 @Html.Partial("Scripts/VehicleController")
 
@@ -33,7 +34,9 @@
         @* ReSharper disable once UseOfImplicitGlobalInFunctionScope *@
         vehicleCtrl
             @* ReSharper disable once PossiblyUnassignedProperty, UseOfImplicitGlobalInFunctionScope *@
-            .setColorCtrl(colorCtrl);
+            .setColorCtrl(colorCtrl)
+            @* ReSharper disable once PossiblyUnassignedProperty, UseOfImplicitGlobalInFunctionScope *@
+            .setCursorCtrl(cursorCtrl);
     });
 
 </script>
