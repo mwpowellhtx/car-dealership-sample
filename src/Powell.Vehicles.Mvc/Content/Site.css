@@ -103,3 +103,7 @@ input.field-validation-error {
 input.error {
     border: 1px solid red !important;
 }
+
+body.waiting * {
+    cursor: progress;
+}
