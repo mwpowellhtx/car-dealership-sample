@@ -319,6 +319,8 @@
     <Content Include="Views\Shared\Scripts\ColorController.cshtml" />
     <Content Include="Views\Vehicle\Index.cshtml" />
     <Content Include="Views\Shared\Scripts\VehicleController.cshtml" />
+    <Content Include="Views\Shared\Scripts\CursorController.cshtml" />
+    <Content Include="Views\Shared\Scripts\ManufacturerController.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
