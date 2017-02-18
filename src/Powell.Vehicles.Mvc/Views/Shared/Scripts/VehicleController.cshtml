@@ -5,9 +5,15 @@
         var VehicleController = function() {
 
             this.__colorCtrl = null;
+            this.__cursorCtrl = null;
 
             this.setColorCtrl = function(colorCtrl) {
                 this.__colorCtrl = colorCtrl;
+                return this;
+            };
+
+            this.setCursorCtrl = function(cursorCtrl) {
+                this.__cursorCtrl = cursorCtrl;
                 return this;
             };
 
@@ -45,6 +51,7 @@
             this.__createDialog = function(opts) {
                 var ctrl = this;
                 var colorCtrl = this.__colorCtrl;
+                var cursorCtrl = this.__cursorCtrl;
                 return this.__createDialogDiv()
                     .dialog({
                         title: opts.title,
@@ -72,9 +79,16 @@
                                         @* ReSharper disable once PossiblyUnassignedProperty *@
                                         args.vehicleId = opts.vehicle.VehicleId;
                                     }
-                                    $.post(opts.uri, args)
+                                    var getUri = function() {
+                                        @* ReSharper disable once PossiblyUnassignedProperty *@
+                                        cursorCtrl.setWaiting(true);
+                                        return opts.uri;
+                                    };
+                                    $.post(getUri(), args)
                                         .done(function() {
                                             window.location.reload();
+                                            @* ReSharper disable once PossiblyUnassignedProperty *@
+                                            cursorCtrl.setWaiting();
                                         });
                                     return false;
                                 }
