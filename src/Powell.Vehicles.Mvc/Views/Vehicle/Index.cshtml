@@ -1,0 +1,184 @@
+﻿@model IEnumerable<Powell.Vehicles.Mvc.Vehicle.VehicleViewModel>
+@{
+    ViewBag.Title = "Vehicles";
+}
+
+@Html.Partial("Scripts/CursorController")
+@Html.Partial("Scripts/ColorController")
+@Html.Partial("Scripts/VehicleController")
+
+<h2>@ViewBag.Title.</h2>
+
+<p class="text-success">@ViewBag.StatusMessage</p>
+
+<p>Arrange for Vehicle parameters here combining available Model Years with desired Color, current Mileage, and a brief Description.</p>
+
+<script type="text/javascript">
+
+    $(function() {
+        @* ReSharper disable once UseOfImplicitGlobalInFunctionScope *@
+        colorCtrl
+            @* ReSharper disable once PossiblyUnassignedProperty *@
+            .subscribe(function() {
+                @* ReSharper disable once UseOfImplicitGlobalInFunctionScope, PossiblyUnassignedProperty *@
+                colorCtrl.refreshSwatches();
+            })
+            @* ReSharper disable once PossiblyUnassignedProperty *@
+            .subscribe(function() {
+                @* ReSharper disable once UseOfImplicitGlobalInFunctionScope, PossiblyUnassignedProperty *@
+                colorCtrl.populateSelectmenu($("#inp-sel-color"));
+            })
+            @* ReSharper disable once PossiblyUnassignedProperty *@
+            .getColorsFromServer();
+        @* VehicleController works with the ColorController, so we must inform of that instance. *@
+        @* ReSharper disable once UseOfImplicitGlobalInFunctionScope *@
+        vehicleCtrl
+            @* ReSharper disable once PossiblyUnassignedProperty, UseOfImplicitGlobalInFunctionScope *@
+            .setColorCtrl(colorCtrl)
+            @* ReSharper disable once PossiblyUnassignedProperty, UseOfImplicitGlobalInFunctionScope *@
+            .setCursorCtrl(cursorCtrl);
+    });
+
+</script>
+
+<script type="text/javascript">
+
+    $(function() {
+        var div = $("div[id='div-vehicles']");
+        div.find("table").addClass("table-spacing");
+        div.find("tr").addClass("table-greenbar");
+        div.find("th").addClass("table-spacing");
+        div.find("td").addClass("table-spacing");
+    });
+
+</script>
+
+<script type="text/javascript">
+    @* TODO: TBD: should seriously consider factoring this into a ViewController... especially for adding new / editing existing... *@
+    $(function() {
+
+        $("#btn-add-vehicle")
+            .click(function() {
+                @* ReSharper disable once UseOfImplicitGlobalInFunctionScope, PossiblyUnassignedProperty *@
+                vehicleCtrl.addNewVehicle();
+            });
+
+        $("button[id^='btn-edit-vehicle-']")
+            .click(function() {
+                var tr = $(this).parents("tr");
+                @* Gather up the necessary elements for the Vehicle. This is where a data binding framework may come in handy. *@
+                var vehicle = {
+                    VehicleId: tr.find("input[data-vehicle-id]").attr("data-vehicle-id"),
+                    ModelYearColorId: tr.find("input[data-modelyearcolor-id]").attr("data-modelyearcolor-id"),
+                    ColorId: tr.find("div.swatch").attr("data-background-color-id"),
+                    Mileage: parseFloat(tr.find("span[data-mileage]").text()),
+                    Description: tr.find("span[data-description]").text()
+                };
+                @* ReSharper disable once UseOfImplicitGlobalInFunctionScope, PossiblyUnassignedProperty *@
+                vehicleCtrl.editVehicle(vehicle);
+            });
+
+    });
+
+</script>
+
+<script type="text/javascript">
+
+    $(function() {
+
+        $("button[id^='btn-delete-vehicle-']")
+            .click(function() {
+                var dlg = $(this);
+                var getVehicleId = function () {
+                    return dlg.parents("tr").find("input[data-vehicle-id]").attr("data-vehicle-id");
+                };
+                $("<div>")
+                    .append(
+                        $("<p>").append("Do you want to delete the vehicle?")
+                    )
+                    .dialog({
+                        title: "Delete Vehicle",
+                        height: "auto",
+                        width: "auto",
+                        modal: true,
+                        buttons: [
+                            {
+                                text: "OK",
+                                click: function() {
+                                    $.post("/Vehicle/Delete", { vehicleId: getVehicleId() })
+                                        .then(function() {
+                                            window.location.reload();
+                                        });
+                                }
+                            }
+                        ],
+                        open: function() {
+                            $(".ui-dialog-titlebar-close").hide();
+                        },
+                        close: function() {
+                            $(this).dialog("destroy").remove();
+                        }
+                    });
+
+                return false;
+            });
+    });
+
+</script>
+
+<button type="submit" id="btn-add-vehicle" title="Add Vehicle">
+    <span class="glyphicon glyphicon-plus"></span>
+</button>
+
+<div id="div-vehicles">
+    <table>
+
+        <tr>
+            <th>@Html.LabelFor(x => x.FirstOrDefault().Year)</th>
+            <th>@Html.LabelFor(x => x.FirstOrDefault().ManufacturerName)</th>
+            <th>@Html.LabelFor(x => x.FirstOrDefault().ModelName)</th>
+            <th colspan="2">@Html.LabelFor(x => x.FirstOrDefault().ColorName)</th>
+            <th>@Html.LabelFor(x => x.FirstOrDefault().Mileage)</th>
+            <th width="200">@Html.LabelFor(x => x.FirstOrDefault().Description)</th>
+            <th colspan="2"></th>
+        </tr>
+
+        @for (var i = 0; i < Model.Count(); i++)
+        {
+            <tr class="top-alignment">
+                <td>
+                    @Html.HiddenFor(x => x.ElementAt(i).Id, new Dictionary<string, object>
+                    {
+                        { "data-vehicle-id", $"{Model.ElementAt(i).Id:D}" }
+                    })
+                    @Html.DisplayTextFor(x => x.ElementAt(i).Year)
+                </td>
+                <td>@Html.DisplayTextFor(x => x.ElementAt(i).ManufacturerName)</td>
+                <td>@Html.DisplayTextFor(x => x.ElementAt(i).ModelName)</td>
+                <td>
+                    @Html.HiddenFor(x => x.ElementAt(i).ModelYearColorId, new Dictionary<string, object>
+                    {
+                        { "data-modelyearcolor-id", $"{Model.ElementAt(i).ModelYearColorId:D}" },
+                    })
+                    @Html.DisplayTextFor(x => x.ElementAt(i).ColorName)
+                </td>
+                <td>
+                    <div class="swatch" data-background-color-id="@(Model.ElementAt(i).ColorId)"></div>
+                </td>
+                <td><span data-mileage>@(Model.ElementAt(i).Mileage)</span></td>
+                <td><span data-description>@(Model.ElementAt(i).Description)</span></td>
+                <td>
+                    <button type="submit" id="btn-edit-vehicle-@($"{Model.ElementAt(i).Id:D}")" title="Edit Vehicle">
+                        <span class="glyphicon glyphicon-edit"></span>
+                    </button>
+                </td>
+                <td>
+                    <button type="submit" id="btn-delete-vehicle-@($"{Model.ElementAt(i).Id:D}")" title="Delete Vehicle">
+                        <span class="glyphicon glyphicon-trash"></span>
+                    </button>
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>

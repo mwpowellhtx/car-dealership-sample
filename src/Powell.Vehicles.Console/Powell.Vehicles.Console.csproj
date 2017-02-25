@@ -1,0 +1,127 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{415D64C1-3A3D-405D-A6E5-E277D515CAE0}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Powell.Vehicles.Console</RootNamespace>
+    <AssemblyName>Powell.Vehicles.Console</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="FluentNHibernate, Version=2.0.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\FluentNHibernate.2.0.3.0\lib\net40\FluentNHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="Iesi.Collections, Version=4.0.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Iesi.Collections.4.0.1.4000\lib\net40\Iesi.Collections.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NHibernate, Version=4.1.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <HintPath>..\packages\NHibernate.4.1.1.4000\lib\net40\NHibernate.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Powell.Data.Access.Hibernate\Powell.Data.Access.Hibernate.csproj">
+      <Project>{F0EB5888-3110-4E39-9209-659AAD0204C2}</Project>
+      <Name>Powell.Data.Access.Hibernate</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Powell.Data.Access.Policies\Powell.Data.Access.Policies.csproj">
+      <Project>{DE1B0813-CE0F-4C67-9224-51644A5CBF74}</Project>
+      <Name>Powell.Data.Access.Policies</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Powell.Data.Access\Powell.Data.Access.csproj">
+      <Project>{0A1EFC20-1FD7-43BB-A406-8A6684D3A2F7}</Project>
+      <Name>Powell.Data.Access</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Powell.Data.Core\Powell.Data.Core.csproj">
+      <Project>{F9D0FADC-F115-45EA-BB56-F1D1E140D2E5}</Project>
+      <Name>Powell.Data.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Powell.Domain.Access.Mappings\Powell.Domain.Access.Mappings.csproj">
+      <Project>{85E8FB77-8B4A-4EDE-9FC9-299658A7BB99}</Project>
+      <Name>Powell.Domain.Access.Mappings</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Powell.Domain.Core\Powell.Domain.Core.csproj">
+      <Project>{073caab8-13d2-4ad2-9be3-c3b113d5f90b}</Project>
+      <Name>Powell.Domain.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Powell.Identity.Access.Mappings\Powell.Identity.Access.Mappings.csproj">
+      <Project>{b086e16d-e47f-4fd3-b521-77c679411e8a}</Project>
+      <Name>Powell.Identity.Access.Mappings</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Powell.Identity.Domain.Data\Powell.Identity.Domain.Data.csproj">
+      <Project>{5c3dafdd-c75d-4228-897e-f5284f668b91}</Project>
+      <Name>Powell.Identity.Domain.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Powell.Identity.Domain\Powell.Identity.Domain.csproj">
+      <Project>{DD20EF3E-707F-498F-8436-F3D5B4CAFD4C}</Project>
+      <Name>Powell.Identity.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Powell.Vehicles.Access.Mappings\Powell.Vehicles.Access.Mappings.csproj">
+      <Project>{b81682e2-d573-4e9b-ab80-7687b87a176c}</Project>
+      <Name>Powell.Vehicles.Access.Mappings</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Powell.Vehicles.Domain.Data\Powell.Vehicles.Domain.Data.csproj">
+      <Project>{0E3B3C34-1FCE-4DBE-BE13-8341F74BBF8E}</Project>
+      <Name>Powell.Vehicles.Domain.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Powell.Vehicles.Domain\Powell.Vehicles.Domain.csproj">
+      <Project>{A64C067A-3B0D-4718-90AF-D994C7BB3DE0}</Project>
+      <Name>Powell.Vehicles.Domain</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

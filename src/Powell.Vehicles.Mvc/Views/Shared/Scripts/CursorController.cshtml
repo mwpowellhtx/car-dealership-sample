@@ -1,0 +1,20 @@
+﻿
+<script type="text/javascript">
+    @* ReSharper disable once PossiblyUnassignedProperty *@
+    if (CursorController === undefined) {
+        var CursorController = function() {
+
+            this.setWaiting = function(state) {
+                var body = $("body");
+                var clz = "waiting";
+                state === true ? body.addClass(clz) : body.removeClass(clz);
+                return this;
+            }
+        }
+    }
+
+    if (cursorCtrl === undefined) {
+        var cursorCtrl = new CursorController();
+    }
+
+</script>

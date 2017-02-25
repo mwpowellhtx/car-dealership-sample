@@ -1,0 +1,109 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+div.ui-dialog-buttonpane {
+    font-size: 1.5em;
+}
+
+div.swatch {
+    border-style: solid;
+    border-width: 1px;
+    border-color: black;
+    height: 16px;
+    width: 16px;
+}
+
+/* TODO: TBD: it's not pretty, but this kind of works around an issue with a faulty drop down rendering in a modal dialog */
+#inp-sel-manufacturer-menu {
+    position: relative;
+    max-height: 100px;
+    width: 100px;
+    z-index: 999;
+}
+
+#inp-sel-model-menu {
+    position: relative;
+    max-height: 100px;
+    width: 100px;
+    z-index: 999;
+}
+
+#inp-sel-year-menu {
+    position: relative;
+    max-height: 150px;
+    width: 100px;
+    z-index: 999;
+}
+
+#inp-sel-color-menu {
+    position: relative;
+    max-height: 100px;
+    width: 100px;
+    z-index: 999;
+}
+
+div.reveal-modal {
+    position: relative;
+    z-index: 100;
+}
+
+td.dialog-spacing {
+    padding: 4px;
+}
+
+table.dialog-spacing { 
+    border-spacing: 4px;
+    border-collapse: collapse;
+}
+
+td.table-spacing, th.table-spacing {
+    padding: 7px;
+}
+
+table.table-spacing { 
+    border-spacing: 7px;
+    border-collapse: collapse;
+}
+
+/* ReSharper disable once CssBrowserCompatibility */
+tr.table-greenbar:nth-of-type(2n+2) {
+    background: #e4ffc7;
+}
+
+tr.top-alignment {
+    vertical-align: top;
+}
+
+input.field-validation-error {
+    background-color: red;
+}
+
+input.error {
+    border: 1px solid red !important;
+}
+
+body.waiting * {
+    cursor: progress;
+}

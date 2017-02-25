@@ -1,0 +1,12 @@
+bin/
+obj/
+packages/
+
+.vs/
+_ReSharper.Caches/
+
+*.suo
+*.DotSettings
+*.user
+
+*.odt#

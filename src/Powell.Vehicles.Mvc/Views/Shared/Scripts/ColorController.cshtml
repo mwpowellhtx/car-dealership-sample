@@ -1,0 +1,85 @@
+﻿
+<script type="text/javascript">
+    @* ReSharper disable once PossiblyUnassignedProperty *@
+    if (ColorController === undefined) {
+        var ColorController = function() {
+
+            this.__colors = [];
+
+            this.__listeners = [];
+
+            this.__modelYearColors = [];
+
+            this.__findColorById = function(id) {
+                return this.__colors.find(function(c) { return c.Id === id; });
+            };
+
+            this.getColorById = function(id) {
+                return this.__findColorById(id);
+            };
+
+            this.subscribe = function(listener) {
+                var ctrl = this;
+                ctrl.__listeners.push(listener);
+                return this;
+            };
+
+            this.getColorsFromServer = function() {
+                var ctrl = this;
+                $.get("/Paint/Get")
+                    .done(function(data) {
+                        ctrl.__colors = data;
+                        @* TODO: TBD: could be an argument for a more active binding technology, i.e. Angular, etc *@
+                        $.each(ctrl.__listeners, function(i, l) { l({ colors: ctrl.__colors }); });
+                    });
+                return this;
+            };
+
+            this.refreshSwatches = function() {
+                var ctrl = this;
+                @* Select all Swatch Divs contained by a Table Cell. *@
+                $("td div.swatch")
+                    .each(function(i, div) {
+                        var id = $(div).attr("data-background-color-id");
+                        @* ReSharper disable once PossiblyUnassignedProperty *@
+                        $(div).attr("style", "background-color: " + ctrl.__findColorById(id).Value);
+                    });
+                return this;
+            };
+
+            this.populateSelectmenu = function(sel) {
+                var ctrl = this;
+                sel.find("option").remove();
+                $.each(ctrl.__colors,
+                    function(i, c) {
+                        sel.append($("<option>").val(c.Id).html(c.Name));
+                    });
+                @* ReSharper disable once PossiblyUnassignedProperty *@
+                var colorId = ctrl.__colors[0].Id;
+                sel.val(colorId).selectmenu("refresh");
+                @* TODO: TBD: not sure why the event chain isn't picking this one up. I'm sure there's an event name or something. This will workaround it for the time being... *@
+                sel.parents("tr").find("td div.swatch").attr("data-background-color-id", colorId);
+                ctrl.refreshSwatches();
+                return this;
+            };
+
+            this.registerModelYears = function(modelYears) {
+                var ctrl = this;
+                ctrl.__modelYearColors = $.map(modelYears,
+                    function(my) {
+                        return { Id: my.Id, ColorId: my.ColorId };
+                    });
+                return this;
+            };
+
+            this.findModelYearColorById = function(id) {
+                return this.__modelYearColors.find(function(myc) { return myc.Id === id; });
+            };
+        }
+    }
+
+    if (colorCtrl === undefined) {
+        var colorCtrl = new ColorController();
+    }
+
+</script>

@@ -1,0 +1,182 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C677181E-6BEB-45AE-8F56-A368EACE7C0A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Powell.Vehicles</RootNamespace>
+    <AssemblyName>Powell.Vehicles.Mvc.Services</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="BouncyCastle.Crypto, Version=1.8.1.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
+      <HintPath>..\packages\BouncyCastle.1.8.1\lib\BouncyCastle.Crypto.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Iesi.Collections, Version=4.0.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Iesi.Collections.4.0.1.4000\lib\net40\Iesi.Collections.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MailKit, Version=1.10.0.0, Culture=neutral, PublicKeyToken=4e064fe7c44a8f1b, processorArchitecture=MSIL">
+      <HintPath>..\packages\MailKit.1.10.2\lib\net45\MailKit.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Owin, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.2.1\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.3.0.1\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Cookies, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.Cookies.3.0.1\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.OAuth, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.OAuth.3.0.1\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MimeKit, Version=1.10.0.0, Culture=neutral, PublicKeyToken=bede1c8a46c66814, processorArchitecture=MSIL">
+      <HintPath>..\packages\MimeKit.1.10.1\lib\net45\MimeKit.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NHibernate, Version=4.1.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <HintPath>..\packages\NHibernate.4.1.1.4000\lib\net40\NHibernate.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Disposable.cs" />
+    <Compile Include="Managers\ApplicationSignInManager.cs" />
+    <Compile Include="Managers\ApplicationUserExtensionMethods.cs" />
+    <Compile Include="Managers\ControllerManager.cs" />
+    <Compile Include="Managers\HibernateManagerBase.cs" />
+    <Compile Include="Managers\IControllerManager.cs" />
+    <Compile Include="Managers\IHibernateManagerBase.cs" />
+    <Compile Include="Managers\IManager.cs" />
+    <Compile Include="Managers\IManufacturerManager.cs" />
+    <Compile Include="Managers\IModelManager.cs" />
+    <Compile Include="Managers\IModelYearManager.cs" />
+    <Compile Include="Managers\IPaintManager.cs" />
+    <Compile Include="Managers\IVehicleManager.cs" />
+    <Compile Include="Managers\IYearManager.cs" />
+    <Compile Include="Managers\ManagerBase.cs" />
+    <Compile Include="Managers\ManagerHelper.cs" />
+    <Compile Include="Managers\ApplicationUserManager.cs" />
+    <Compile Include="Managers\ApplicationFeatureManager.cs" />
+    <Compile Include="Managers\FeatureManagerBase.cs" />
+    <Compile Include="Managers\ManufacturerManager.cs" />
+    <Compile Include="Managers\ModelManager.cs" />
+    <Compile Include="Managers\ModelYearManager.cs" />
+    <Compile Include="Managers\PaintManager.cs" />
+    <Compile Include="Managers\SignInManagerBase.cs" />
+    <Compile Include="Managers\UserManagerBase.cs" />
+    <Compile Include="Managers\VehicleManager.cs" />
+    <Compile Include="Managers\YearManager.cs" />
+    <Compile Include="Mvc\Identity\ICompositeFeatureRepository.cs" />
+    <Compile Include="Mvc\Identity\IIdentityFeatureStore.cs" />
+    <Compile Include="Mvc\Identity\IIdentityRepository.cs" />
+    <Compile Include="Mvc\Identity\IIdentityUserStore.cs" />
+    <Compile Include="Mvc\Identity\UserRepository.cs" />
+    <Compile Include="Mvc\Identity\IRepositories.cs" />
+    <Compile Include="Mvc\Identity\IdentityRepository.cs" />
+    <Compile Include="Mvc\Services\MailKitEmailService.cs" />
+    <Compile Include="Mvc\Services\IControllerOptions.cs" />
+    <Compile Include="Mvc\Services\ControllerOptions.cs" />
+    <Compile Include="Mvc\Services\EmailService.cs" />
+    <Compile Include="Mvc\Services\BasicDataProtectorTokenProvider.cs" />
+    <Compile Include="Mvc\Services\IBasicUserTokenProvider.cs" />
+    <Compile Include="Mvc\Services\IEmailIdentityMessageService.cs" />
+    <Compile Include="Mvc\Services\IMachineKeyDataProtector.cs" />
+    <Compile Include="Mvc\Services\MachineKeyDataProtector.cs" />
+    <Compile Include="Mvc\Services\SmsService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Powell.Data.Access.Hibernate\Powell.Data.Access.Hibernate.csproj">
+      <Project>{F0EB5888-3110-4E39-9209-659AAD0204C2}</Project>
+      <Name>Powell.Data.Access.Hibernate</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Powell.Data.Access\Powell.Data.Access.csproj">
+      <Project>{0A1EFC20-1FD7-43BB-A406-8A6684D3A2F7}</Project>
+      <Name>Powell.Data.Access</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Powell.Domain.Core\Powell.Domain.Core.csproj">
+      <Project>{073CAAB8-13D2-4AD2-9BE3-C3B113D5F90B}</Project>
+      <Name>Powell.Domain.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Powell.Identity.Domain\Powell.Identity.Domain.csproj">
+      <Project>{DD20EF3E-707F-498F-8436-F3D5B4CAFD4C}</Project>
+      <Name>Powell.Identity.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Powell.Vehicles.Domain\Powell.Vehicles.Domain.csproj">
+      <Project>{A64C067A-3B0D-4718-90AF-D994C7BB3DE0}</Project>
+      <Name>Powell.Vehicles.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Powell.Vehicles.Mvc.ViewModels\Powell.Vehicles.Mvc.ViewModels.csproj">
+      <Project>{765ED74F-1C42-4CD7-B718-864B5A83D68D}</Project>
+      <Name>Powell.Vehicles.Mvc.ViewModels</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

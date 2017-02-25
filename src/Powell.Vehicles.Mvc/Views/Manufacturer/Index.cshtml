@@ -1,0 +1,71 @@
+﻿@model IEnumerable<Powell.Vehicles.Mvc.Manufacturer.ManufacturerViewModel>
+@{
+    ViewBag.Title = "Manufacturers";
+}
+
+@Html.Partial("Scripts/CursorController")
+@Html.Partial("Scripts/ManufacturerController")
+
+<h2>@ViewBag.Title.</h2>
+
+<p class="text-success">@ViewBag.StatusMessage</p>
+
+<script type="text/javascript">
+
+    $(function() {
+
+        @* ReSharper disable once UseOfImplicitGlobalInFunctionScope *@
+        manufacturerCtrl
+            @* ReSharper disable once UseOfImplicitGlobalInFunctionScope, PossiblyUnassignedProperty *@
+            .setCursorCtrl(cursorCtrl);
+
+    });
+
+</script>
+
+<script type="text/javascript">
+
+    $(function() {
+
+        var div = $("div[id='div-manufacturers']");
+
+        div.find("table,th,td").addClass("table-spacing");
+
+        div.find("tr").addClass("table-greenbar");
+
+    });
+
+</script>
+
+<script type="text/javascript">
+
+    $(function() {
+        $("#btn-add-manufacturer")
+            .click(function() {
+                @* ReSharper disable once UseOfImplicitGlobalInFunctionScope, PossiblyUnassignedProperty *@
+                manufacturerCtrl.addNew();
+            });
+    });
+
+</script>
+
+<button type="submit" id="btn-add-manufacturer" title="Add Manufacturer">
+    <span class="glyphicon glyphicon-plus"></span>
+</button>
+
+<div id="div-manufacturers">
+    <table>
+
+        <tr>
+            <th>@Html.LabelFor(x => x.FirstOrDefault().Name)</th>
+        </tr>
+
+        @for (var i = 0; i < Model.Count(); i++)
+        {
+            <tr>
+                <td>@Html.DisplayTextFor(x => x.ElementAt(i).Name)</td>
+            </tr>
+        }
+
+    </table>
+</div>

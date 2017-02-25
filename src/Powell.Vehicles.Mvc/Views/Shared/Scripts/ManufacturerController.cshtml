@@ -1,0 +1,86 @@
+﻿
+<script type="text/javascript">
+
+    if (ManufacturerController === undefined) {
+        var ManufacturerController = function() {
+
+            this.__cursorCtrl = null;
+
+            this.setCursorCtrl = function(cursorCtrl) {
+                this.__cursorCtrl = cursorCtrl;
+                return this;
+            };
+
+            this.__createDialogDiv = function() {
+                return $("<div>")
+                    .prop("id", "div-add-manufacturer")
+                    .append(
+                        $("<p>").append("Manufacturer:"),
+                        $("<p>").append(
+                            $("<input>")
+                            .prop("type", "text")
+                            .prop("name", "manufacuter-name")
+                            .prop("id", "inp-manufacturer-name")
+                            .prop("width", "250")
+                        )
+                    );
+            };
+
+            this.__createDialog = function() {
+                var cursorCtrl = this.__cursorCtrl;
+                return this.__createDialogDiv()
+                    .dialog({
+                        title: "Add Manufacturer",
+                        modal: true,
+                        buttons: [
+                            {
+                                text: "OK",
+                                click: function() {
+                                    var getUri = function() {
+                                        @* ReSharper disable once PossiblyUnassignedProperty *@
+                                        cursorCtrl.setWaiting(true);
+                                        return "/Manufacturer/Add";
+                                    };
+                                    var args = {
+                                        name: $("#inp-manufacturer-name").val()
+                                    };
+                                    $.post(getUri(), args)
+                                        .done(function() {
+                                            window.location.reload();
+                                            @* ReSharper disable once PossiblyUnassignedProperty *@
+                                            cursorCtrl.setWaiting();
+                                        });
+                                }
+                            }
+                        ],
+                        open: function() {
+                            $(".ui-dialog-titlebar-close").hide();
+                        },
+                        close: function() {
+                            $(this).dialog("destroy").remove();
+                        }
+                    })
+                    .keydown(function(event) {
+                        if (event.keyCode === 13) {
+                            @* eq(0) is close; so eq(1) in this case is "OK". *@
+                            $(this).parent()
+                                .find("button:eq(1)").trigger("click");
+                            return false;
+                        }
+                        return undefined;
+                    });
+            };
+
+            this.addNew = function() {
+                this.__createDialog().dialog("open");
+            };
+
+            @* this.editExisting = function() { this.__createDialog().dialog("open"); }; *@
+        }
+    }
+
+    if (manufacturerCtrl === undefined) {
+        var manufacturerCtrl = new ManufacturerController();
+    }
+
+</script>
